@@ -1,0 +1,2694 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A youth plyometric workout tracker for the Hayes kids, with jump mechanics, ankle stiffness, soft landings, quickness, basketball carryover, safety notes, and progress logging.">
+  <title>Hayes Kids Plyometric Workout Tracker</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #16211f;
+      --muted: #60716d;
+      --line: #dce4df;
+      --paper: #fbfcf8;
+      --surface: #ffffff;
+      --teal: #0f766e;
+      --teal-dark: #0b4d49;
+      --amber: #d97706;
+      --coral: #d94f3d;
+      --blue: #2563eb;
+      --green-soft: #e6f4ee;
+      --gold-soft: #fff2cf;
+      --red-soft: #fff0ed;
+      --shadow: 0 14px 40px rgba(24, 36, 32, 0.08);
+      --radius: 8px;
+      --focus: 0 0 0 3px rgba(15, 118, 110, 0.22);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: var(--ink);
+      background:
+        linear-gradient(180deg, rgba(230, 244, 238, 0.95) 0, rgba(251, 252, 248, 0.98) 310px),
+        var(--paper);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.45;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    button:focus-visible,
+    input:focus-visible,
+    textarea:focus-visible,
+    select:focus-visible {
+      outline: none;
+      box-shadow: var(--focus);
+    }
+
+    .shell {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid rgba(220, 228, 223, 0.88);
+      background: rgba(251, 252, 248, 0.92);
+      backdrop-filter: blur(16px);
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 68px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .mark {
+      display: grid;
+      place-items: center;
+      flex: 0 0 42px;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      color: white;
+      background:
+        radial-gradient(circle at 30% 26%, rgba(255, 255, 255, 0.32), transparent 28%),
+        linear-gradient(135deg, #d94f3d, #d97706);
+      box-shadow: 0 8px 18px rgba(217, 79, 61, 0.22);
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: clamp(1.05rem, 1.9vw, 1.42rem);
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    .brand span {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 0.83rem;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .icon-button,
+    .text-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--ink);
+      border: 1px solid var(--line);
+      box-shadow: 0 1px 0 rgba(24, 36, 32, 0.04);
+    }
+
+    .icon-button {
+      width: 40px;
+      padding: 0;
+    }
+
+    .text-button {
+      gap: 8px;
+      padding: 0 12px;
+      white-space: nowrap;
+    }
+
+    .primary-button {
+      color: white;
+      background: var(--teal);
+      border-color: var(--teal);
+    }
+
+    .icon {
+      width: 19px;
+      height: 19px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .hero {
+      padding: 28px 0 18px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.85fr);
+      gap: 22px;
+      align-items: stretch;
+    }
+
+    .overview {
+      display: grid;
+      align-content: center;
+      gap: 18px;
+      min-height: 280px;
+      padding: clamp(18px, 3vw, 30px);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(255, 250, 239, 0.78)),
+        repeating-linear-gradient(90deg, transparent 0 58px, rgba(15, 118, 110, 0.05) 58px 59px);
+      box-shadow: var(--shadow);
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      margin: 0;
+      color: var(--teal-dark);
+      font-size: 0.82rem;
+      font-weight: 750;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .overview h2 {
+      max-width: 780px;
+      margin: 0;
+      font-size: clamp(2rem, 5vw, 4.4rem);
+      line-height: 0.96;
+      letter-spacing: 0;
+    }
+
+    .overview p {
+      max-width: 720px;
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(0.98rem, 1.3vw, 1.12rem);
+    }
+
+    .metric-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .metric {
+      min-height: 78px;
+      padding: 12px;
+      border: 1px solid rgba(15, 118, 110, 0.16);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.76);
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 1.3rem;
+      line-height: 1.05;
+    }
+
+    .metric span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .court-panel {
+      position: relative;
+      min-height: 280px;
+      overflow: hidden;
+      border-radius: var(--radius);
+      border: 1px solid rgba(11, 77, 73, 0.22);
+      background:
+        linear-gradient(160deg, rgba(15, 118, 110, 0.92), rgba(12, 69, 65, 0.92)),
+        #0f766e;
+      box-shadow: var(--shadow);
+    }
+
+    .court-panel svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.9;
+    }
+
+    .court-caption {
+      position: absolute;
+      inset-inline: 18px;
+      bottom: 18px;
+      display: grid;
+      gap: 8px;
+      color: white;
+      text-shadow: 0 2px 18px rgba(0, 0, 0, 0.22);
+    }
+
+    .court-caption strong {
+      font-size: 1.12rem;
+    }
+
+    .court-caption span {
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 0.9rem;
+    }
+
+    .safety-band {
+      border-block: 1px solid rgba(217, 79, 61, 0.18);
+      background: var(--red-soft);
+    }
+
+    .safety-inner {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 14px 0;
+      color: #6f241c;
+    }
+
+    .safety-inner p {
+      margin: 0;
+      font-size: 0.92rem;
+    }
+
+    main {
+      padding: 24px 0 44px;
+    }
+
+    .app-grid {
+      display: grid;
+      grid-template-columns: minmax(230px, 280px) minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .view-tabs {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 18px;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.78);
+      box-shadow: 0 8px 30px rgba(24, 36, 32, 0.05);
+    }
+
+    .view-tab {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 44px;
+      padding: 0 12px;
+      border-radius: var(--radius);
+      color: var(--ink);
+      background: transparent;
+      font-weight: 800;
+    }
+
+    .view-tab svg {
+      flex: 0 0 auto;
+    }
+
+    .view-tab[aria-selected="true"] {
+      color: white;
+      background: var(--teal);
+      box-shadow: 0 8px 18px rgba(15, 118, 110, 0.18);
+    }
+
+    .view-panel {
+      display: none;
+    }
+
+    .view-panel.is-active {
+      display: block;
+    }
+
+    .side-panel,
+    .workout-panel,
+    .log-panel,
+    .notes-panel,
+    .calendar-panel,
+    .progress-panel,
+    .description-panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: 0 8px 30px rgba(24, 36, 32, 0.05);
+    }
+
+    .side-panel {
+      position: sticky;
+      top: 84px;
+      padding: 14px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .section-title h3 {
+      margin: 0;
+      font-size: 0.98rem;
+      letter-spacing: 0;
+    }
+
+    .small-muted {
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .athlete-grid,
+    .week-grid {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .week-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .week-btn,
+    .athlete-btn,
+    .day-tab,
+    .mode-btn {
+      min-height: 38px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: var(--paper);
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .week-btn[aria-pressed="true"],
+    .athlete-btn[aria-pressed="true"],
+    .day-tab[aria-selected="true"],
+    .mode-btn[aria-pressed="true"] {
+      color: white;
+      border-color: var(--teal);
+      background: var(--teal);
+    }
+
+    .athlete-btn {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 8px;
+      min-height: 50px;
+      padding: 0 10px;
+      text-align: left;
+    }
+
+    .athlete-btn small {
+      display: block;
+      margin-top: 1px;
+      font-weight: 550;
+      opacity: 0.84;
+    }
+
+    .day-tabs {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .day-tab {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 8px;
+      min-height: 48px;
+      padding: 0 10px;
+      text-align: left;
+    }
+
+    .day-tab small {
+      display: block;
+      margin-top: 1px;
+      font-weight: 550;
+      opacity: 0.84;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--amber);
+    }
+
+    .day-tab:nth-child(2) .dot {
+      background: var(--blue);
+    }
+
+    .day-tab:nth-child(3) .dot {
+      background: var(--coral);
+    }
+
+    .mini-progress {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      min-width: 32px;
+      height: 24px;
+      border-radius: 999px;
+      color: currentColor;
+      background: rgba(255, 255, 255, 0.5);
+      font-size: 0.75rem;
+    }
+
+    .rule-list {
+      display: grid;
+      gap: 9px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .rule-list li {
+      display: grid;
+      grid-template-columns: 22px 1fr;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    .rule-list svg {
+      width: 18px;
+      height: 18px;
+      margin-top: 1px;
+      color: var(--teal);
+    }
+
+    .content-stack {
+      display: grid;
+      gap: 18px;
+      min-width: 0;
+    }
+
+    .workout-panel {
+      overflow: hidden;
+    }
+
+    .workout-head {
+      display: grid;
+      gap: 14px;
+      padding: 18px;
+      border-bottom: 1px solid var(--line);
+      background:
+        linear-gradient(90deg, rgba(230, 244, 238, 0.86), rgba(255, 242, 207, 0.6)),
+        var(--surface);
+    }
+
+    .workout-title-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .workout-head h2 {
+      margin: 0;
+      font-size: clamp(1.35rem, 2.6vw, 2.05rem);
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+
+    .workout-head p {
+      margin: 6px 0 0;
+      max-width: 760px;
+      color: var(--muted);
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 30px;
+      padding: 0 10px;
+      border-radius: 999px;
+      color: var(--teal-dark);
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid rgba(15, 118, 110, 0.18);
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .progress-wrap {
+      display: grid;
+      gap: 7px;
+      min-width: 190px;
+    }
+
+    .progress-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .progress-track {
+      overflow: hidden;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(96, 113, 109, 0.17);
+    }
+
+    .progress-bar {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--teal), var(--amber));
+      transition: width 0.25s ease;
+    }
+
+    .mode-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .mode-btn {
+      padding: 0 12px;
+    }
+
+    .segment-list {
+      display: grid;
+      gap: 14px;
+      padding: 18px;
+    }
+
+    .segment {
+      display: grid;
+      gap: 10px;
+    }
+
+    .segment-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .segment-header h3 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
+      font-size: 0.96rem;
+      letter-spacing: 0;
+    }
+
+    .segment-time {
+      flex: 0 0 auto;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 750;
+    }
+
+    .exercise-grid {
+      display: grid;
+      gap: 8px;
+    }
+
+    .exercise {
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      min-height: 72px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    .exercise input[type="checkbox"] {
+      appearance: none;
+      display: grid;
+      place-items: center;
+      width: 24px;
+      height: 24px;
+      margin: 0;
+      border-radius: 6px;
+      border: 2px solid #aab8b3;
+      background: white;
+      cursor: pointer;
+    }
+
+    .exercise input[type="checkbox"]::before {
+      content: "";
+      width: 12px;
+      height: 7px;
+      border-left: 2px solid white;
+      border-bottom: 2px solid white;
+      transform: translateY(-1px) rotate(-45deg) scale(0);
+      transition: transform 0.12s ease;
+    }
+
+    .exercise input[type="checkbox"]:checked {
+      border-color: var(--teal);
+      background: var(--teal);
+    }
+
+    .exercise input[type="checkbox"]:checked::before {
+      transform: translateY(-1px) rotate(-45deg) scale(1);
+    }
+
+    .exercise-main {
+      min-width: 0;
+    }
+
+    .exercise-main strong {
+      display: block;
+      font-size: 0.95rem;
+      line-height: 1.18;
+    }
+
+    .exercise-main span {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 0.83rem;
+    }
+
+    .dose {
+      justify-self: end;
+      min-width: 112px;
+      max-width: 140px;
+      padding: 7px 9px;
+      border-radius: var(--radius);
+      text-align: center;
+      color: #6f4a04;
+      background: var(--gold-soft);
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    .optional {
+      display: none;
+    }
+
+    body[data-mode="45"] .optional {
+      display: grid;
+    }
+
+    .log-panel,
+    .notes-panel {
+      padding: 16px;
+    }
+
+    .calendar-panel,
+    .progress-panel,
+    .description-panel {
+      overflow: hidden;
+      padding: 16px;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+
+    .panel-head h2 {
+      margin: 0;
+      font-size: clamp(1.35rem, 2.6vw, 2.05rem);
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+
+    .panel-head p {
+      max-width: 740px;
+      margin: 6px 0 0;
+      color: var(--muted);
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .stat-card {
+      min-height: 88px;
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+    }
+
+    .stat-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.76rem;
+      font-weight: 850;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .stat-card strong {
+      display: block;
+      margin-top: 7px;
+      font-size: 1.18rem;
+      line-height: 1.1;
+    }
+
+    .calendar-head {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      padding: 14px;
+      border-radius: var(--radius);
+      background:
+        linear-gradient(90deg, rgba(230, 244, 238, 0.9), rgba(255, 242, 207, 0.62)),
+        var(--paper);
+      border: 1px solid var(--line);
+    }
+
+    .calendar-title {
+      text-align: center;
+    }
+
+    .calendar-title h2 {
+      margin: 0;
+      font-size: 1.24rem;
+    }
+
+    .calendar-title p {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+
+    .calendar-tools {
+      display: grid;
+      grid-template-columns: minmax(220px, 1fr) auto;
+      gap: 10px;
+      align-items: end;
+      margin: 12px 0;
+    }
+
+    .calendar-tools .field {
+      gap: 5px;
+    }
+
+    .workout-day-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin: 12px 0;
+    }
+
+    .calendar-workout-tab {
+      display: grid;
+      gap: 3px;
+      min-height: 82px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      text-align: left;
+      color: var(--ink);
+      background: var(--paper);
+    }
+
+    .calendar-workout-tab strong {
+      font-size: 0.98rem;
+    }
+
+    .calendar-workout-tab span,
+    .calendar-workout-tab small {
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .calendar-workout-tab[aria-pressed="true"] {
+      color: white;
+      background: var(--teal);
+      border-color: var(--teal);
+    }
+
+    .calendar-workout-tab[aria-pressed="true"] span,
+    .calendar-workout-tab[aria-pressed="true"] small {
+      color: rgba(255, 255, 255, 0.88);
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 6px;
+    }
+
+    .calendar-dow {
+      padding: 6px 4px;
+      color: var(--muted);
+      font-size: 0.76rem;
+      font-weight: 850;
+      text-align: center;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .calendar-day {
+      min-height: 104px;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: white;
+    }
+
+    .calendar-day.is-out {
+      opacity: 0.46;
+      background: var(--paper);
+    }
+
+    .calendar-day.is-today {
+      border-color: var(--amber);
+      box-shadow: inset 0 0 0 2px rgba(217, 119, 6, 0.14);
+    }
+
+    .calendar-day.is-selected {
+      border-color: var(--teal);
+      box-shadow: inset 0 0 0 2px rgba(15, 118, 110, 0.16);
+    }
+
+    .calendar-day.is-done {
+      background: var(--green-soft);
+    }
+
+    .day-number {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4px;
+      font-weight: 850;
+    }
+
+    .planned-pill {
+      display: inline-flex;
+      width: fit-content;
+      margin-top: 7px;
+      padding: 3px 7px;
+      border-radius: 999px;
+      color: var(--teal-dark);
+      background: var(--green-soft);
+      font-size: 0.74rem;
+      font-weight: 850;
+    }
+
+    .calendar-plan-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 28px;
+      margin-top: 7px;
+      padding: 0 9px;
+      border-radius: var(--radius);
+      color: white;
+      background: var(--teal);
+      font-size: 0.78rem;
+      font-weight: 850;
+    }
+
+    .calendar-selected {
+      margin-top: 14px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+    }
+
+    .calendar-selected h3 {
+      margin: 0 0 6px;
+      font-size: 1rem;
+    }
+
+    .calendar-selected p {
+      margin: 0 0 10px;
+      color: var(--muted);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: white;
+    }
+
+    .progress-table {
+      width: 100%;
+      min-width: 760px;
+      border-collapse: collapse;
+    }
+
+    .progress-table th,
+    .progress-table td {
+      padding: 12px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .progress-table th {
+      color: var(--muted);
+      font-size: 0.76rem;
+      font-weight: 850;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .progress-table tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .progress-table strong {
+      display: block;
+      line-height: 1.2;
+    }
+
+    .progress-table small {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+    }
+
+    .recent-log-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .recent-log {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+    }
+
+    .description-toolbar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .description-filter {
+      min-height: 36px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      color: var(--ink);
+      background: var(--paper);
+      font-weight: 800;
+    }
+
+    .description-filter[aria-pressed="true"] {
+      color: white;
+      background: var(--teal);
+      border-color: var(--teal);
+    }
+
+    .description-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .description-card {
+      display: grid;
+      gap: 9px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+    }
+
+    .description-card h3 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .description-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .description-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .log-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .field label {
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .field input,
+    .field textarea,
+    .field select {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      color: var(--ink);
+      padding: 9px 10px;
+    }
+
+    .field textarea {
+      grid-column: 1 / -1;
+      min-height: 86px;
+      resize: vertical;
+    }
+
+    .pain-alert {
+      display: none;
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: var(--radius);
+      color: #6f241c;
+      background: var(--red-soft);
+      border: 1px solid rgba(217, 79, 61, 0.18);
+      font-size: 0.9rem;
+    }
+
+    .pain-alert.is-visible {
+      display: block;
+    }
+
+    .notes-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .note-block {
+      min-height: 150px;
+      padding: 13px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: var(--paper);
+    }
+
+    .note-block h4 {
+      margin: 0 0 8px;
+      font-size: 0.95rem;
+    }
+
+    .note-block ul {
+      display: grid;
+      gap: 7px;
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 0.87rem;
+    }
+
+    .sources {
+      padding: 20px 0 36px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .sources a {
+      color: var(--teal-dark);
+      font-weight: 700;
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid,
+      .app-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .side-panel {
+        position: static;
+      }
+
+      .day-tabs {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .day-tab {
+        grid-template-columns: auto 1fr;
+      }
+
+      .mini-progress {
+        grid-column: 1 / -1;
+        width: 100%;
+      }
+
+      .log-grid,
+      .notes-grid,
+      .stat-grid,
+      .description-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .shell {
+        width: min(100% - 20px, 1180px);
+      }
+
+      .topbar-inner {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 10px 0;
+      }
+
+      .top-actions {
+        width: 100%;
+        justify-content: stretch;
+      }
+
+      .text-button {
+        flex: 1 1 auto;
+      }
+
+      .overview h2 {
+        font-size: clamp(2rem, 14vw, 3.2rem);
+      }
+
+      .metric-strip,
+      .day-tabs,
+      .log-grid,
+      .notes-grid,
+      .stat-grid,
+      .workout-day-tabs,
+      .description-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .view-tabs {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .workout-title-row,
+      .segment-header,
+      .panel-head,
+      .calendar-head {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .calendar-head {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .calendar-tools {
+        grid-template-columns: 1fr;
+      }
+
+      .calendar-grid {
+        gap: 4px;
+      }
+
+      .calendar-day {
+        min-height: 84px;
+        padding: 6px;
+      }
+
+      .planned-pill {
+        font-size: 0.68rem;
+      }
+
+      .progress-wrap {
+        width: 100%;
+      }
+
+      .exercise {
+        grid-template-columns: 32px minmax(0, 1fr);
+      }
+
+      .dose {
+        grid-column: 2;
+        justify-self: start;
+        max-width: none;
+      }
+    }
+
+    @media print {
+      .topbar,
+      .top-actions,
+      .side-panel,
+      .view-tabs,
+      .mode-row,
+      .log-panel button,
+      .sources {
+        display: none !important;
+      }
+
+      body {
+        background: white;
+      }
+
+      .shell {
+        width: 100%;
+      }
+
+      .hero,
+      main {
+        padding: 0;
+      }
+
+      .hero-grid,
+      .app-grid,
+      .notes-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .court-panel {
+        min-height: 120px;
+      }
+
+      .workout-panel,
+      .log-panel,
+      .notes-panel,
+      .calendar-panel,
+      .progress-panel,
+      .description-panel,
+      .overview,
+      .court-panel {
+        box-shadow: none;
+        break-inside: avoid;
+      }
+
+      .view-panel {
+        display: block !important;
+        margin-bottom: 18px;
+      }
+    }
+  </style>
+</head>
+<body data-mode="30">
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <div class="brand" aria-label="Hayes Kids Plyometric Workout Tracker">
+        <div class="mark" aria-hidden="true">
+          <svg class="icon" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="9"></circle>
+            <path d="M3.5 9.5c4.6 1.1 8.8 1.1 17 0"></path>
+            <path d="M3.5 14.5c4.6-1.1 8.8-1.1 17 0"></path>
+            <path d="M12 3c-2 2.5-2.9 5.4-2.9 9s.9 6.5 2.9 9"></path>
+            <path d="M12 3c2 2.5 2.9 5.4 2.9 9s-.9 6.5-2.9 9"></path>
+          </svg>
+        </div>
+        <div>
+          <h1>Hayes Kids</h1>
+          <span>Plyometric workout tracker</span>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button class="text-button" type="button" id="printBtn" title="Print plan">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9V3h12v6"></path><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 14h12v7H6z"></path></svg>
+          Print
+        </button>
+        <button class="text-button primary-button" type="button" id="exportBtn" title="Export progress as CSV">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="M7 10l5 5 5-5"></path><path d="M12 15V3"></path></svg>
+          Export
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="shell hero-grid">
+      <div class="overview">
+        <p class="eyebrow">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg>
+          3 days per week
+        </p>
+        <h2>Jump higher. Land softer.</h2>
+        <p>Six weeks of youth-friendly plyometric training for better vertical jump mechanics, quicker feet, ankle spring, and safer landings. Sessions are built for about 30 minutes, with an optional add-on that keeps the total under 45 minutes.</p>
+        <div class="metric-strip" aria-label="Plan metrics">
+          <div class="metric"><strong>30 min</strong><span>standard session</span></div>
+          <div class="metric"><strong>45 min</strong><span>maximum with add-on</span></div>
+          <div class="metric"><strong>1 day</strong><span>rest between jump days</span></div>
+        </div>
+      </div>
+      <div class="court-panel" aria-label="Basketball court training visual">
+        <svg viewBox="0 0 560 360" role="img" aria-labelledby="courtTitle">
+          <title id="courtTitle">Basketball half court lines</title>
+          <defs>
+            <pattern id="wood" width="44" height="44" patternUnits="userSpaceOnUse">
+              <path d="M0 0h44v44H0z" fill="rgba(255,255,255,0.03)"></path>
+              <path d="M0 10h44M0 31h44" stroke="rgba(255,255,255,0.045)" stroke-width="1"></path>
+            </pattern>
+          </defs>
+          <rect width="560" height="360" fill="url(#wood)"></rect>
+          <path d="M60 0v360M500 0v360M60 310h440M60 92h440" stroke="rgba(255,255,255,.52)" stroke-width="4"></path>
+          <path d="M208 310v-84h144v84M242 310v-84M318 310v-84" stroke="rgba(255,255,255,.52)" stroke-width="4" fill="none"></path>
+          <circle cx="280" cy="226" r="48" stroke="rgba(255,255,255,.52)" stroke-width="4" fill="none"></circle>
+          <path d="M146 92c18 68 74 116 134 116s116-48 134-116" stroke="rgba(255,255,255,.52)" stroke-width="4" fill="none"></path>
+          <path d="M266 82h28v10h-28z" fill="rgba(255,255,255,.72)"></path>
+          <circle cx="280" cy="110" r="18" stroke="rgba(255,255,255,.72)" stroke-width="4" fill="none"></circle>
+        </svg>
+        <div class="court-caption">
+          <strong>Training rhythm</strong>
+          <span>Warm up, land quietly, jump with control, recover well, and only progress when every rep looks clean.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="safety-band">
+    <div class="shell safety-inner">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 9v4"></path><path d="M12 17h.01"></path><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path></svg>
+      <p><strong>Training rule:</strong> this plan is for healthy youth athletes. Use adult supervision, warm up first, keep jump volume low, land quietly, and stop the session for sharp pain, dizziness, unusual symptoms, or form that breaks down.</p>
+    </div>
+  </section>
+
+  <main>
+    <div class="shell">
+      <div class="view-tabs" role="tablist" aria-label="Tracker sections">
+        <button class="view-tab" type="button" role="tab" data-view="plan" aria-selected="true">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6v12"></path><path d="M18 6v12"></path><path d="M6 12h12"></path><path d="M3 9v6"></path><path d="M21 9v6"></path></svg>
+          <span>Workout Plan</span>
+        </button>
+        <button class="view-tab" type="button" role="tab" data-view="calendar" aria-selected="false">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M3 10h18"></path></svg>
+          <span>Calendar</span>
+        </button>
+        <button class="view-tab" type="button" role="tab" data-view="progress" aria-selected="false">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18"></path><path d="m7 15 4-4 3 3 5-7"></path></svg>
+          <span>Progress</span>
+        </button>
+        <button class="view-tab" type="button" role="tab" data-view="descriptions" aria-selected="false">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"></path></svg>
+          <span>Exercise Description</span>
+        </button>
+      </div>
+
+      <section class="view-panel is-active" id="view-plan" role="tabpanel">
+        <div class="app-grid">
+      <aside class="side-panel" aria-label="Plan controls">
+        <div class="section-title">
+          <h3>Kid</h3>
+          <span class="small-muted">separate progress</span>
+        </div>
+        <div class="athlete-grid" id="athleteGrid"></div>
+
+        <div class="section-title">
+          <h3>Week</h3>
+          <span class="small-muted">1-6</span>
+        </div>
+        <div class="week-grid" id="weekGrid"></div>
+
+        <div class="section-title">
+          <h3>Workout</h3>
+          <span class="small-muted">A/B/C</span>
+        </div>
+        <div class="day-tabs" id="dayTabs" role="tablist" aria-label="Workout days"></div>
+
+        <div class="section-title">
+          <h3>Rules</h3>
+        </div>
+        <ul class="rule-list">
+          <li>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>
+            <span>Use athletic posture and move slowly enough to own each rep.</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>
+            <span>Count clean landings, not max effort jumps. Rest enough that every rep still looks sharp.</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>
+            <span>Skip depth jumps, high boxes, and max jump testing unless a qualified coach is supervising.</span>
+          </li>
+        </ul>
+      </aside>
+
+      <div class="content-stack">
+        <section class="workout-panel" aria-live="polite">
+          <div class="workout-head">
+            <div class="workout-title-row">
+              <div>
+                <h2 id="workoutTitle"></h2>
+                <p id="workoutSummary"></p>
+              </div>
+              <div class="progress-wrap">
+                <div class="progress-meta">
+                  <span>Session progress</span>
+                  <span id="progressText">0%</span>
+                </div>
+                <div class="progress-track" aria-hidden="true">
+                  <div class="progress-bar" id="progressBar"></div>
+                </div>
+              </div>
+            </div>
+            <div class="badge-row" id="badgeRow"></div>
+            <div class="mode-row" aria-label="Session length">
+              <button class="mode-btn" type="button" data-mode="30" aria-pressed="true">30 min</button>
+              <button class="mode-btn" type="button" data-mode="45" aria-pressed="false">Optional 45 min</button>
+              <span class="small-muted">Use the longer option when energy is good and form is solid.</span>
+            </div>
+          </div>
+          <div class="segment-list" id="segmentList"></div>
+        </section>
+
+        <section class="log-panel">
+          <div class="section-title">
+            <h3>Session Log</h3>
+            <button class="text-button" type="button" id="resetSessionBtn" title="Clear this session">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"></path><path d="M3 3v6h6"></path></svg>
+              Clear
+            </button>
+          </div>
+          <div class="log-grid">
+            <div class="field">
+              <label for="dateInput">Date</label>
+              <input id="dateInput" type="date">
+            </div>
+            <div class="field">
+              <label for="minutesInput">Minutes</label>
+              <input id="minutesInput" type="number" min="0" max="45" step="1" placeholder="30">
+            </div>
+            <div class="field">
+              <label for="rpeInput">Effort</label>
+              <select id="rpeInput">
+                <option value="">Select</option>
+                <option value="4">4 - easy</option>
+                <option value="5">5 - steady</option>
+                <option value="6">6 - working</option>
+                <option value="7">7 - hard but clean</option>
+                <option value="8">8 - too hard for today</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="painInput">Discomfort</label>
+              <select id="painInput">
+                <option value="">Select</option>
+                <option value="0">0 - none</option>
+                <option value="1">1 - mild</option>
+                <option value="2">2 - watch it</option>
+                <option value="3">3 - stop and tell adult</option>
+                <option value="4">4+ - stop and call clinician</option>
+              </select>
+            </div>
+            <div class="field" style="grid-column: 1 / -1;">
+              <label for="notesInput">Notes</label>
+              <textarea id="notesInput" placeholder="What felt springy? Any discomfort? How quiet were the landings?"></textarea>
+            </div>
+          </div>
+            <div class="pain-alert" id="painAlert">Discomfort is high. Stop the session, switch to easy walking and breathing, and check in with a parent before the next workout.</div>
+        </section>
+
+        <section class="notes-panel">
+          <div class="section-title">
+            <h3>Coach Notes</h3>
+            <span class="small-muted">simple and repeatable</span>
+          </div>
+          <div class="notes-grid">
+            <div class="note-block">
+              <h4>Weekly Schedule</h4>
+              <ul>
+                <li>Best rhythm: Monday, Wednesday, Friday.</li>
+                <li>Second option: Tuesday, Thursday, Saturday.</li>
+                <li>Keep one rest day between plyometric sessions.</li>
+              </ul>
+            </div>
+            <div class="note-block">
+              <h4>Progression</h4>
+              <ul>
+                <li>Weeks 1-2: learn quiet landings and clean posture.</li>
+                <li>Weeks 3-4: add one rep only when landings stay soft.</li>
+                <li>Weeks 5-6: add one set to one jump drill or one short speed round.</li>
+              </ul>
+            </div>
+            <div class="note-block">
+              <h4>Equipment</h4>
+              <ul>
+                <li>Tape line, cones or shoes for markers, and a basketball.</li>
+                <li>Low step or bottom stair for step-downs, not high box jumps.</li>
+                <li>Water, open space, and shoes with good traction.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+      </section>
+
+      <section class="view-panel" id="view-calendar" role="tabpanel">
+        <div class="calendar-panel">
+          <div class="panel-head">
+            <div>
+              <h2>Workout Calendar</h2>
+              <p>Matches the previous kids tracker flow: planned workout dates, Workout A/B/C tabs, and Plan buttons that open the right session.</p>
+            </div>
+            <span class="badge">Monday / Wednesday / Friday</span>
+          </div>
+          <div class="calendar-head">
+            <button class="text-button" type="button" id="prevMonthBtn" title="Previous month">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
+              Previous
+            </button>
+            <div class="calendar-title">
+              <h2 id="calendarTitle">Month</h2>
+              <p>Tap Plan inside a workout date to open that full workout plan.</p>
+            </div>
+            <button class="text-button" type="button" id="nextMonthBtn" title="Next month">
+              Next
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
+            </button>
+          </div>
+          <div class="calendar-tools">
+            <div class="field">
+              <label for="monthJump">Jump to Month</label>
+              <select id="monthJump"></select>
+            </div>
+            <button class="text-button primary-button" type="button" id="todayBtn">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M8 14h.01"></path><path d="M12 14h.01"></path><path d="M16 14h.01"></path></svg>
+              Today
+            </button>
+          </div>
+          <div class="section-title">
+            <h3>Workout Day Tabs</h3>
+            <span class="small-muted">tap to view plan</span>
+          </div>
+          <div class="workout-day-tabs" id="calendarWorkoutTabs"></div>
+          <div class="calendar-grid" id="calendarGrid" aria-label="Workout calendar"></div>
+          <div class="calendar-selected" id="calendarSelected"></div>
+        </div>
+      </section>
+
+      <section class="view-panel" id="view-progress" role="tabpanel">
+        <div class="progress-panel">
+          <div class="panel-head">
+            <div>
+              <h2>Progress & Next Step</h2>
+              <p>Same idea as the previous kids tracker: weekly completion, next workout, logged minutes, completed sessions, and a next-time table for each drill.</p>
+            </div>
+            <span class="badge">updates from the session log</span>
+          </div>
+          <div class="stat-grid" id="progressStats"></div>
+          <div class="table-wrap">
+            <table class="progress-table">
+              <thead>
+                <tr>
+                  <th>Exercise</th>
+                  <th>Muscle Focus</th>
+                  <th>Last Session</th>
+                  <th>Next Time</th>
+                </tr>
+              </thead>
+              <tbody id="progressTableBody"></tbody>
+            </table>
+          </div>
+          <div class="recent-log-list" id="recentLogs"></div>
+        </div>
+      </section>
+
+      <section class="view-panel" id="view-descriptions" role="tabpanel">
+        <div class="description-panel">
+          <div class="panel-head">
+            <div>
+              <h2>Exercise Description</h2>
+              <p>Each movement lists the main muscles worked, why it helps jumping and basketball, and the form cue to keep training clean.</p>
+            </div>
+            <span class="badge">muscles + cues</span>
+          </div>
+          <div class="description-toolbar" id="descriptionFilters"></div>
+          <div class="description-grid" id="descriptionGrid"></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="sources">
+    <div class="shell">
+      Training references used: <a href="https://publications.aap.org/pediatrics/article/145/6/e20201011/76942/Resistance-Training-for-Children-and-Adolescents">AAP youth resistance training guidance</a>, <a href="https://www.nsca.com/education/articles/kinetic-select/plyometric-exercises/">NSCA plyometric programming guidance</a>, and <a href="https://www.cdc.gov/physical-activity-basics/guidelines/children.html">CDC child activity guidance</a>.
+    </div>
+  </footer>
+
+  <script>
+    const storageKey = "hayes-kids-plyometric-tracker-v1";
+    const athletes = [
+      { id: "lyric", name: "Lyric", age: 14 },
+      { id: "noble", name: "Noble", age: 13 },
+      { id: "sky", name: "Sky", age: 12 }
+    ];
+    const weeks = [1, 2, 3, 4, 5, 6];
+    const plan = {
+      A: {
+        short: "Landing mechanics + ankle spring",
+        title: "Workout A: Landing Mechanics + Ankle Spring",
+        summary: "Build the base for safe jumping: quiet landings, ankle stiffness, hip control, and low-volume vertical jump practice.",
+        badges: ["Soft landings", "Ankle spring", "Vertical prep", "Short intervals"],
+        segments: [
+          {
+            name: "Warm-up",
+            time: "5 min",
+            icon: "pulse",
+            items: [
+              ["March or brisk walk", "Tall posture, relaxed shoulders, easy bounce in the feet.", "2 min"],
+              ["Ankle rocks + hip circles", "Small range, smooth ankles and hips.", "60 sec"],
+              ["Line walk to athletic stance", "Walk heel-to-toe on a line, then freeze in stance.", "2 x 20 sec"]
+            ]
+          },
+          {
+            name: "Landing Circuit",
+            time: "14-16 min",
+            icon: "dumbbell",
+            items: [
+              ["Snap-down to athletic stance", "Rise tall, snap to hips-back stance, land quiet, hold 2 seconds.", "3 x 4"],
+              ["Squat-to-calf raise", "Mini squat, drive tall, finish on toes without leaving the ground.", "2 x 8"],
+              ["Two-foot hop and stick", "Tiny hop forward, land on both feet, freeze before standing up.", "3 x 3"],
+              ["Low pogo hops", "Small ankle hops, quiet feet, knees soft, stop before landings get loud.", "3 x 8"],
+              ["Calf raise iso hold", "Rise to toes and hold tall without wobbling.", "2 x 20 sec"]
+            ]
+          },
+          {
+            name: "Core + Balance",
+            time: "4 min",
+            icon: "shield",
+            items: [
+              ["Dead bug heel tap", "Ribs quiet, slow exhale, controlled taps.", "2 x 5/side"],
+              ["Single-leg balance reach", "Stand tall, reach one hand forward, reset before wobbling.", "2 x 5/side"]
+            ]
+          },
+          {
+            name: "Cardio",
+            time: "5-6 min",
+            icon: "timer",
+            items: [
+              ["Court walk-jog intervals", "20 sec light jog or fast walk, 40 sec easy walk.", "6 rounds"]
+            ]
+          },
+          {
+            name: "Cool-down",
+            time: "2-3 min",
+            icon: "leaf",
+            items: [
+              ["Breathing reset", "One hand on ribs, one on belly, slow exhales.", "60 sec"],
+              ["Calf + quad stretch", "Easy stretch, no forcing.", "45 sec/side"]
+            ]
+          },
+          {
+            name: "Optional Add-on",
+            time: "8-10 min",
+            icon: "plus",
+            optional: true,
+            items: [
+              ["Vertical jump stick", "Jump at about 70%, land quietly, hold the landing.", "3 x 3"],
+              ["Line quick taps", "Tap both feet over a tape line with short, quiet contacts.", "3 x 10 sec"],
+              ["Wall sit", "Shoulders and hips against wall, knees comfortable, breathe.", "2 x 25 sec"],
+              ["Free throws after jumps", "Shoot calmly after the jump work.", "10 shots"]
+            ]
+          }
+        ]
+      },
+      B: {
+        short: "Lateral power + controlled stops",
+        title: "Workout B: Lateral Power + Controlled Stops",
+        summary: "Train side-to-side quickness, single-leg balance, landing control, and deceleration for safer cuts and sharper changes of direction.",
+        badges: ["Lateral hops", "Balance", "Deceleration", "Quick feet"],
+        segments: [
+          {
+            name: "Warm-up",
+            time: "5 min",
+            icon: "pulse",
+            items: [
+              ["Brisk walk or light dribble", "Easy pace, tall posture.", "2 min"],
+              ["Side shuffle walk", "Slow shuffle, hips low, feet under control.", "2 x 20 sec"],
+              ["Bodyweight reverse lunge reach", "Small step, front knee steady.", "2 x 5/side"]
+            ]
+          },
+          {
+            name: "Power + Control Circuit",
+            time: "15-17 min",
+            icon: "dumbbell",
+            items: [
+              ["Lateral line hop and stick", "Hop sideways over a line, land quiet, hold 2 seconds.", "3 x 3/side"],
+              ["Skater step hold", "Step wide like a skater, freeze balanced before returning.", "2 x 5/side"],
+              ["Drop-step freeze", "Open one hip, take one drop step, stop balanced.", "2 x 5/side"],
+              ["Single-leg hip hinge reach", "Reach hips back, torso long, balance first.", "2 x 6/side"],
+              ["Incline push-up", "Hands on bench or counter, body straight.", "2 x 8"]
+            ]
+          },
+          {
+            name: "Core Control",
+            time: "3-4 min",
+            icon: "shield",
+            items: [
+              ["Bird dog", "Pause 2 seconds, hips level.", "1 x 6/side"],
+              ["Pallof press", "Band at chest height, resist rotation.", "2 x 6/side"]
+            ]
+          },
+          {
+            name: "Cardio",
+            time: "5-6 min",
+            icon: "timer",
+            items: [
+              ["Shuffle-to-stick intervals", "10 sec shuffle, stick the stop, 30 sec easy walk.", "6 rounds"]
+            ]
+          },
+          {
+            name: "Cool-down",
+            time: "3 min",
+            icon: "leaf",
+            items: [
+              ["Hip flexor stretch", "Gentle, no forcing.", "45 sec/side"],
+              ["Hamstring stretch", "Hinge at hips with long spine.", "45 sec/side"]
+            ]
+          },
+          {
+            name: "Optional Add-on",
+            time: "8-10 min",
+            icon: "plus",
+            optional: true,
+            items: [
+              ["Diagonal hop and stick", "Hop on a diagonal, land with knees over toes, freeze.", "2 x 3/side"],
+              ["Quick feet in place", "Fast feet, quiet contacts, athletic posture.", "4 x 10 sec"],
+              ["Reverse lunge practice", "Small controlled step, hold a chair if needed.", "2 x 5/side"],
+              ["Ball handling", "Stationary pounds and crossovers with quick, clean rhythm.", "4 min"]
+            ]
+          }
+        ]
+      },
+      C: {
+        short: "Vertical jump + approach footwork",
+        title: "Workout C: Vertical Jump + Approach Footwork",
+        summary: "Connect takeoff mechanics, arm swing timing, approach steps, and landing control without turning the day into a max-jump test.",
+        badges: ["Vertical jump", "Approach steps", "Arm swing", "Recovery"],
+        segments: [
+          {
+            name: "Warm-up",
+            time: "5 min",
+            icon: "pulse",
+            items: [
+              ["Easy bike, walk, or jog", "Stay relaxed and upright.", "2 min"],
+              ["Glute bridge march", "Quiet hips, small march.", "2 x 6/side"],
+              ["Arm swing rehearsal", "Swing arms back, then tall finish on toes.", "2 x 6"]
+            ]
+          },
+          {
+            name: "Jump Mechanics Circuit",
+            time: "15-17 min",
+            icon: "dumbbell",
+            items: [
+              ["Countermovement jump stick", "Dip, swing arms, jump at 70-80%, land quiet and hold.", "4 x 3"],
+              ["Approach jump footwork", "Walk through one-two plant steps, jump lightly, land balanced.", "3 x 3"],
+              ["Low step-down", "Step down from a low step, tap heel softly, control knee line.", "2 x 6/side"],
+              ["Reverse lunge to knee drive", "Small step back, stand tall, pause at the top.", "2 x 6/side"],
+              ["Basketball rebound reach", "Reach high like a rebound, land and chin the ball.", "2 x 5"]
+            ]
+          },
+          {
+            name: "Core + Landing",
+            time: "5 min",
+            icon: "shield",
+            items: [
+              ["Bench plank", "Elbows on bench, breathe, no sagging.", "2 x 25 sec"],
+              ["Side plank from knees", "Straight line shoulder to hip to knee.", "1 x 20 sec/side"],
+              ["Landing score check", "Rate landings: quiet feet, knees over toes, balanced finish.", "5 reps"]
+            ]
+          },
+          {
+            name: "Cardio",
+            time: "6-7 min",
+            icon: "timer",
+            items: [
+              ["Sprint-float intervals", "10 sec quick run or fast bike, 50 sec easy recovery.", "6 rounds"]
+            ]
+          },
+          {
+            name: "Cool-down",
+            time: "3 min",
+            icon: "leaf",
+            items: [
+              ["Walk and breathe", "Let heart rate come down.", "90 sec"],
+              ["Quad + calf stretch", "Gentle, balanced on both sides.", "45 sec/side"]
+            ]
+          },
+          {
+            name: "Optional Add-on",
+            time: "8-10 min",
+            icon: "plus",
+            optional: true,
+            items: [
+              ["Single-leg pogo prep", "Tiny rhythm bounces while holding wall support; switch sides.", "2 x 8/side"],
+              ["Broad jump stick", "Small forward jump, quiet two-foot landing, freeze.", "3 x 2"],
+              ["Approach jump footwork", "Walk through one-two plant steps, jump lightly, land balanced.", "2 x 4"],
+              ["Free throws under light fatigue", "Shoot 2, breathe, repeat.", "12-16 shots"]
+            ]
+          }
+        ]
+      }
+    };
+
+    const scheduleDays = [
+      { day: "A", weekday: 1, dayName: "Monday" },
+      { day: "B", weekday: 3, dayName: "Wednesday" },
+      { day: "C", weekday: 5, dayName: "Friday" }
+    ];
+
+    const iconPaths = {
+      pulse: '<path d="M3 13h4l2-7 4 14 2-7h6"></path>',
+      dumbbell: '<path d="M6 6v12"></path><path d="M18 6v12"></path><path d="M6 12h12"></path><path d="M3 9v6"></path><path d="M21 9v6"></path>',
+      shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>',
+      timer: '<path d="M10 2h4"></path><path d="M12 14l3-3"></path><circle cx="12" cy="14" r="8"></circle>',
+      leaf: '<path d="M11 20A7 7 0 0 1 4 13c0-5 4-8 13-9 1 9-4 16-10 16"></path><path d="M4 20c4-4 8-6 13-8"></path>',
+      plus: '<path d="M12 5v14"></path><path d="M5 12h14"></path>'
+    };
+
+    const state = loadState();
+    if (!state.sessions) state.sessions = {};
+    let currentAthleteId = state.currentAthleteId || athletes[0].id;
+    if (!athletes.some(athlete => athlete.id === currentAthleteId)) {
+      currentAthleteId = athletes[0].id;
+    }
+    migrateLegacySessions();
+    let currentWeek = state.currentWeek || 1;
+    let currentDay = state.currentDay || "A";
+    const todayDate = new Date();
+    const programStartDate = getProgramStartDate(todayDate);
+    let calendarCursor = new Date(state.calendarYear || todayDate.getFullYear(), state.calendarMonth ?? todayDate.getMonth(), 1);
+    let selectedCalendarIso = state.selectedCalendarIso || toIso(todayDate);
+    let descriptionFilter = state.descriptionFilter || "all";
+    const exerciseDescriptions = buildExerciseDescriptions();
+
+    const viewTabs = document.querySelectorAll(".view-tab");
+    const viewPanels = document.querySelectorAll(".view-panel");
+    const athleteGrid = document.getElementById("athleteGrid");
+    const weekGrid = document.getElementById("weekGrid");
+    const dayTabs = document.getElementById("dayTabs");
+    const workoutTitle = document.getElementById("workoutTitle");
+    const workoutSummary = document.getElementById("workoutSummary");
+    const badgeRow = document.getElementById("badgeRow");
+    const segmentList = document.getElementById("segmentList");
+    const progressText = document.getElementById("progressText");
+    const progressBar = document.getElementById("progressBar");
+    const dateInput = document.getElementById("dateInput");
+    const minutesInput = document.getElementById("minutesInput");
+    const rpeInput = document.getElementById("rpeInput");
+    const painInput = document.getElementById("painInput");
+    const notesInput = document.getElementById("notesInput");
+    const painAlert = document.getElementById("painAlert");
+    const monthJump = document.getElementById("monthJump");
+    const calendarTitle = document.getElementById("calendarTitle");
+    const calendarWorkoutTabs = document.getElementById("calendarWorkoutTabs");
+    const calendarGrid = document.getElementById("calendarGrid");
+    const calendarSelected = document.getElementById("calendarSelected");
+    const progressStats = document.getElementById("progressStats");
+    const progressTableBody = document.getElementById("progressTableBody");
+    const recentLogs = document.getElementById("recentLogs");
+    const descriptionFilters = document.getElementById("descriptionFilters");
+    const descriptionGrid = document.getElementById("descriptionGrid");
+
+    function loadState() {
+      try {
+        return JSON.parse(localStorage.getItem(storageKey)) || { sessions: {} };
+      } catch {
+        return { sessions: {} };
+      }
+    }
+
+    function emptySession() {
+      return { checks: {}, date: "", minutes: "", rpe: "", pain: "", notes: "" };
+    }
+
+    function migrateLegacySessions() {
+      if (state.athleteMigrationDone) return;
+      const legacyKeys = Object.keys(state.sessions).filter(key => /^week-\d+-[ABC]$/.test(key));
+      legacyKeys.forEach(key => {
+        const targetKey = `${currentAthleteId}-${key}`;
+        if (!state.sessions[targetKey]) state.sessions[targetKey] = state.sessions[key];
+        delete state.sessions[key];
+      });
+      state.athleteMigrationDone = true;
+    }
+
+    function currentAthlete() {
+      return athletes.find(athlete => athlete.id === currentAthleteId) || athletes[0];
+    }
+
+    function saveState() {
+      state.currentAthleteId = currentAthleteId;
+      state.currentWeek = currentWeek;
+      state.currentDay = currentDay;
+      state.currentView = getActiveView();
+      state.calendarYear = calendarCursor.getFullYear();
+      state.calendarMonth = calendarCursor.getMonth();
+      state.selectedCalendarIso = selectedCalendarIso;
+      state.descriptionFilter = descriptionFilter;
+      localStorage.setItem(storageKey, JSON.stringify(state));
+    }
+
+    function sessionKey(day = currentDay, week = currentWeek, athleteId = currentAthleteId) {
+      return `${athleteId}-week-${week}-${day}`;
+    }
+
+    function getSession(day = currentDay, week = currentWeek, athleteId = currentAthleteId) {
+      const key = sessionKey(day, week, athleteId);
+      if (!state.sessions[key]) {
+        state.sessions[key] = emptySession();
+      }
+      return state.sessions[key];
+    }
+
+    function peekSession(day = currentDay, week = currentWeek, athleteId = currentAthleteId) {
+      return state.sessions[sessionKey(day, week, athleteId)] || emptySession();
+    }
+
+    function exerciseId(segmentIndex, itemIndex) {
+      return `${currentDay}-${segmentIndex}-${itemIndex}`;
+    }
+
+    function activeIncludesOptional() {
+      return document.body.dataset.mode === "45";
+    }
+
+    function allItemsFor(day, includeOptional = activeIncludesOptional()) {
+      return plan[day].segments.flatMap((segment, segmentIndex) =>
+        includeOptional || !segment.optional
+          ? segment.items.map((_, itemIndex) => `${day}-${segmentIndex}-${itemIndex}`)
+          : []
+      );
+    }
+
+    function checkedCount(day, week, includeOptional = activeIncludesOptional(), athleteId = currentAthleteId) {
+      const session = peekSession(day, week, athleteId);
+      return allItemsFor(day, includeOptional).filter(id => session.checks[id]).length;
+    }
+
+    function renderAthleteButtons() {
+      athleteGrid.innerHTML = athletes.map(athlete => {
+        const completed = weeks.reduce((total, week) => (
+          total + Object.keys(plan).filter(day => sessionIsComplete(day, week, athlete.id)).length
+        ), 0);
+        return `
+          <button class="athlete-btn" type="button" data-athlete="${athlete.id}" aria-pressed="${athlete.id === currentAthleteId}">
+            <span><strong>${athlete.name}</strong><small>${athlete.age} yrs old</small></span>
+            <span class="mini-progress">${completed}/18</span>
+          </button>
+        `;
+      }).join("");
+    }
+
+    function renderWeekButtons() {
+      weekGrid.innerHTML = weeks.map(week => `
+        <button class="week-btn" type="button" data-week="${week}" aria-pressed="${week === currentWeek}">
+          ${week}
+        </button>
+      `).join("");
+    }
+
+    function renderDayTabs() {
+      dayTabs.innerHTML = Object.entries(plan).map(([day, workout]) => {
+        const total = allItemsFor(day).length;
+        const done = checkedCount(day, currentWeek);
+        return `
+          <button class="day-tab" type="button" role="tab" data-day="${day}" aria-selected="${day === currentDay}">
+            <span class="dot" aria-hidden="true"></span>
+            <span><strong>${day}</strong><small>${workout.short}</small></span>
+            <span class="mini-progress">${done}/${total}</span>
+          </button>
+        `;
+      }).join("");
+    }
+
+    function renderIcon(name) {
+      return `<svg class="icon" viewBox="0 0 24 24" aria-hidden="true">${iconPaths[name] || iconPaths.pulse}</svg>`;
+    }
+
+    function renderWorkout() {
+      const workout = plan[currentDay];
+      const session = getSession();
+      workoutTitle.textContent = workout.title;
+      workoutSummary.textContent = workout.summary;
+      badgeRow.innerHTML = workout.badges.map(badge => `<span class="badge">${badge}</span>`).join("");
+      segmentList.innerHTML = workout.segments.map((segment, segmentIndex) => `
+        <section class="segment ${segment.optional ? "optional" : ""}">
+          <div class="segment-header">
+            <h3>${renderIcon(segment.icon)} ${segment.name}</h3>
+            <span class="segment-time">${segment.time}</span>
+          </div>
+          <div class="exercise-grid">
+            ${segment.items.map((item, itemIndex) => {
+              const id = exerciseId(segmentIndex, itemIndex);
+              return `
+                <label class="exercise">
+                  <input type="checkbox" data-check="${id}" ${session.checks[id] ? "checked" : ""}>
+                  <span class="exercise-main">
+                    <strong>${item[0]}</strong>
+                    <span>${item[1]}</span>
+                  </span>
+                  <span class="dose">${item[2]}</span>
+                </label>
+              `;
+            }).join("")}
+          </div>
+        </section>
+      `).join("");
+
+      dateInput.value = session.date || "";
+      minutesInput.value = session.minutes || "";
+      rpeInput.value = session.rpe || "";
+      painInput.value = session.pain || "";
+      notesInput.value = session.notes || "";
+      renderAthleteButtons();
+      renderProgress();
+      renderDayTabs();
+      updatePainAlert();
+      refreshSupportingViews();
+    }
+
+    function renderProgress() {
+      const total = allItemsFor(currentDay).length;
+      const done = checkedCount(currentDay, currentWeek);
+      const pct = total ? Math.round((done / total) * 100) : 0;
+      progressText.textContent = `${pct}%`;
+      progressBar.style.width = `${pct}%`;
+    }
+
+    function getActiveView() {
+      return document.querySelector(".view-tab[aria-selected='true']")?.dataset.view || "plan";
+    }
+
+    function switchView(view, shouldSave = true) {
+      viewTabs.forEach(tab => tab.setAttribute("aria-selected", String(tab.dataset.view === view)));
+      viewPanels.forEach(panel => panel.classList.toggle("is-active", panel.id === `view-${view}`));
+      if (view === "calendar") renderCalendar();
+      if (view === "progress") renderProgressView();
+      if (view === "descriptions") renderDescriptions();
+      if (shouldSave) saveState();
+    }
+
+    function pad(value) {
+      return String(value).padStart(2, "0");
+    }
+
+    function toIso(date) {
+      return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+    }
+
+    function fromIso(iso) {
+      const [year, month, day] = iso.split("-").map(Number);
+      return new Date(year, month - 1, day);
+    }
+
+    function formatDate(date, options = {}) {
+      return new Intl.DateTimeFormat("en-US", {
+        weekday: options.weekday || undefined,
+        month: options.month || "short",
+        day: "numeric",
+        year: options.year || undefined
+      }).format(date);
+    }
+
+    function formatMonth(date) {
+      return new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" }).format(date);
+    }
+
+    function getProgramStartDate(date) {
+      const start = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+      const daysSinceMonday = (start.getDay() + 6) % 7;
+      start.setDate(start.getDate() - daysSinceMonday);
+      start.setHours(0, 0, 0, 0);
+      return start;
+    }
+
+    function weekForDate(date) {
+      const dayMs = 24 * 60 * 60 * 1000;
+      const diffWeeks = Math.floor((getProgramStartDate(date) - programStartDate) / (7 * dayMs));
+      return Math.min(6, Math.max(1, diffWeeks + 1));
+    }
+
+    function workoutForDate(date) {
+      return scheduleDays.find(item => item.weekday === date.getDay())?.day || "";
+    }
+
+    function sessionCompletion(day, week, athleteId = currentAthleteId) {
+      const total = allItemsFor(day, false).length;
+      const done = checkedCount(day, week, false, athleteId);
+      return { done, total, pct: total ? Math.round((done / total) * 100) : 0 };
+    }
+
+    function sessionIsLogged(day, week, athleteId = currentAthleteId) {
+      const session = peekSession(day, week, athleteId);
+      return Boolean(session.minutes || session.rpe || session.pain || session.notes || Object.values(session.checks || {}).some(Boolean));
+    }
+
+    function sessionIsComplete(day, week, athleteId = currentAthleteId) {
+      const completion = sessionCompletion(day, week, athleteId);
+      const session = peekSession(day, week, athleteId);
+      return completion.pct >= 80 || Number(session.minutes || 0) >= 25;
+    }
+
+    function allSessionRecords(athleteId = currentAthleteId) {
+      return weeks.flatMap(week => Object.keys(plan).map(day => {
+        const session = peekSession(day, week, athleteId);
+        const completion = sessionCompletion(day, week, athleteId);
+        return { week, day, session, completion };
+      })).filter(record => sessionIsLogged(record.day, record.week, athleteId));
+    }
+
+    function nextScheduledWorkout(fromDate = todayDate) {
+      for (let offset = 0; offset < 60; offset += 1) {
+        const date = new Date(fromDate.getFullYear(), fromDate.getMonth(), fromDate.getDate() + offset);
+        const day = workoutForDate(date);
+        if (!day) continue;
+        const week = weekForDate(date);
+        if (!sessionIsComplete(day, week) || offset > 0) {
+          return { date, day, week };
+        }
+      }
+      return { date: fromDate, day: "A", week: currentWeek };
+    }
+
+    function renderMonthOptions() {
+      const startYear = todayDate.getFullYear();
+      const options = [];
+      for (let year = startYear; year <= startYear + 4; year += 1) {
+        for (let month = 0; month < 12; month += 1) {
+          const date = new Date(year, month, 1);
+          const value = `${year}-${pad(month + 1)}`;
+          options.push(`<option value="${value}">${formatMonth(date)}</option>`);
+        }
+      }
+      monthJump.innerHTML = options.join("");
+    }
+
+    function renderCalendarWorkoutTabs() {
+      calendarWorkoutTabs.innerHTML = scheduleDays.map(item => `
+        <button class="calendar-workout-tab" type="button" data-calendar-workout="${item.day}" aria-pressed="${item.day === currentDay}">
+          <strong>Workout ${item.day}</strong>
+          <span>${item.dayName}</span>
+          <small>${plan[item.day].short}</small>
+        </button>
+      `).join("");
+    }
+
+    function renderCalendar() {
+      calendarTitle.textContent = formatMonth(calendarCursor);
+      monthJump.value = `${calendarCursor.getFullYear()}-${pad(calendarCursor.getMonth() + 1)}`;
+      renderCalendarWorkoutTabs();
+      const firstOfMonth = new Date(calendarCursor.getFullYear(), calendarCursor.getMonth(), 1);
+      const start = new Date(firstOfMonth);
+      start.setDate(start.getDate() - start.getDay());
+      const selectedIso = selectedCalendarIso;
+      const todayIso = toIso(todayDate);
+      const cells = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(day => `<div class="calendar-dow">${day}</div>`);
+
+      for (let index = 0; index < 42; index += 1) {
+        const date = new Date(start.getFullYear(), start.getMonth(), start.getDate() + index);
+        const iso = toIso(date);
+        const day = workoutForDate(date);
+        const week = weekForDate(date);
+        const session = day ? peekSession(day, week) : null;
+        const completion = day ? sessionCompletion(day, week) : null;
+        const isDone = day && session?.date === iso && sessionIsComplete(day, week);
+        const classes = [
+          "calendar-day",
+          date.getMonth() !== calendarCursor.getMonth() ? "is-out" : "",
+          iso === todayIso ? "is-today" : "",
+          iso === selectedIso ? "is-selected" : "",
+          isDone ? "is-done" : ""
+        ].filter(Boolean).join(" ");
+        cells.push(`
+          <div class="${classes}" data-date="${iso}">
+            <div class="day-number">
+              <span>${date.getDate()}</span>
+              ${isDone ? "<span>Done</span>" : ""}
+            </div>
+            ${day ? `
+              <span class="planned-pill">Workout ${day}</span>
+              <button class="calendar-plan-btn" type="button" data-open-plan="${day}" data-date="${iso}" data-week="${week}">
+                Plan
+              </button>
+              <div class="small-muted">${completion.done}/${completion.total}</div>
+            ` : ""}
+          </div>
+        `);
+      }
+      calendarGrid.innerHTML = cells.join("");
+      renderCalendarSelected();
+    }
+
+    function renderCalendarSelected() {
+      const date = fromIso(selectedCalendarIso);
+      const day = workoutForDate(date);
+      if (!day) {
+        calendarSelected.innerHTML = `
+          <h3>${formatDate(date, { weekday: "long", month: "long", year: "numeric" })}</h3>
+          <p>No plyometric workout is planned for this day. Use it for practice, walking, mobility, or full rest.</p>
+        `;
+        return;
+      }
+      const week = weekForDate(date);
+      const completion = sessionCompletion(day, week);
+      const session = peekSession(day, week);
+      calendarSelected.innerHTML = `
+        <h3>${formatDate(date, { weekday: "long", month: "long", year: "numeric" })}</h3>
+        <p><strong>Workout ${day}: ${plan[day].title.replace(`Workout ${day}: `, "")}</strong><br>
+        ${currentAthlete().name}'s status: ${sessionIsComplete(day, week) ? "Completed" : "Planned"} • Week ${week} • ${completion.done}/${completion.total} activities done${session.minutes ? ` • ${session.minutes} min logged` : ""}</p>
+        <button class="text-button primary-button" type="button" data-open-plan="${day}" data-date="${selectedCalendarIso}" data-week="${week}">
+          ${renderIcon("dumbbell")} Open Workout Plan
+        </button>
+      `;
+    }
+
+    function openPlanFor(day, iso, week) {
+      currentDay = day;
+      currentWeek = Number(week || weekForDate(fromIso(iso)));
+      selectedCalendarIso = iso;
+      const session = getSession(day, currentWeek);
+      if (!session.date) session.date = iso;
+      saveState();
+      renderWeekButtons();
+      renderWorkout();
+      switchView("plan");
+    }
+
+    function guidanceFor(day, week) {
+      const session = peekSession(day, week);
+      const completion = sessionCompletion(day, week);
+      const discomfort = Number(session.pain || 0);
+      const effort = Number(session.rpe || 0);
+      if (!sessionIsLogged(day, week)) return "Start low and quiet. Log the session after the first workout.";
+      if (discomfort > 2) return "Repeat lightly and check in before increasing.";
+      if (completion.pct >= 90 && effort && effort <= 7) return "Add 1 clean rep to one jump drill or one short speed round.";
+      if (completion.pct >= 80) return "Repeat once with crisp form, then progress.";
+      return "Finish more of the session before increasing.";
+    }
+
+    function renderProgressView() {
+      const athlete = currentAthlete();
+      const currentWeekDone = Object.keys(plan).filter(day => sessionIsComplete(day, currentWeek)).length;
+      const next = nextScheduledWorkout();
+      const minutes = Object.keys(plan).reduce((total, day) => total + Number(peekSession(day, currentWeek).minutes || 0), 0);
+      const completedTotal = allSessionRecords().filter(record => sessionIsComplete(record.day, record.week)).length;
+      progressStats.innerHTML = `
+        <div class="stat-card"><span>Kid</span><strong>${athlete.name}<br><small>${athlete.age} yrs old</small></strong></div>
+        <div class="stat-card"><span>This Week</span><strong>${currentWeekDone} / 3</strong></div>
+        <div class="stat-card"><span>Next Workout</span><strong>Workout ${next.day}<br><small>${formatDate(next.date)}</small></strong></div>
+        <div class="stat-card"><span>Minutes Logged</span><strong>${minutes} min</strong></div>
+        <div class="stat-card"><span>Completed Sessions</span><strong>${completedTotal}</strong></div>
+      `;
+
+      progressTableBody.innerHTML = exerciseDescriptions.map(entry => {
+        const latest = latestRecordFor(entry.workouts);
+        const lastText = latest
+          ? `${latest.completion.pct}% done${latest.session.date ? `<small>${latest.session.date} - discomfort ${latest.session.pain || "not logged"}</small>` : ""}`
+          : "No log yet<small>Complete a planned day first.</small>";
+        const nextText = latest ? guidanceFor(latest.day, latest.week) : "Start light and focus on form.";
+        return `
+          <tr>
+            <td><strong>${entry.name}</strong><small>${entry.workouts.map(day => `Workout ${day}`).join(", ")} • ${entry.dose}</small></td>
+            <td>${entry.muscles}</td>
+            <td>${lastText}</td>
+            <td>${nextText}</td>
+          </tr>
+        `;
+      }).join("");
+
+      const recent = allSessionRecords().sort((a, b) => String(b.session.date).localeCompare(String(a.session.date))).slice(0, 4);
+      recentLogs.innerHTML = recent.length
+        ? recent.map(record => `
+          <div class="recent-log">
+            <div><strong>${athlete.name}: Workout ${record.day} - Week ${record.week}</strong><br><span class="small-muted">${record.session.date || "No date"} - ${record.completion.pct}% complete - discomfort ${record.session.pain || "not logged"}</span></div>
+            <span class="badge">${record.session.minutes || 0} min</span>
+          </div>
+        `).join("")
+        : `<div class="recent-log"><div><strong>No workouts logged yet for ${athlete.name}.</strong><br><span class="small-muted">Use the session log after the first workout.</span></div></div>`;
+    }
+
+    function latestRecordFor(workouts) {
+      return allSessionRecords()
+        .filter(record => workouts.includes(record.day))
+        .sort((a, b) => String(b.session.date).localeCompare(String(a.session.date)))[0];
+    }
+
+    function describeExercise(name) {
+      const lower = name.toLowerCase();
+      if (lower.includes("vertical jump") || lower.includes("countermovement") || lower.includes("plyometric") || lower.includes("pogo") || lower.includes("approach jump") || lower.includes("squat-to-calf") || lower.includes("broad jump")) {
+        return { muscles: "Glutes, quads, calves, ankles, core", purpose: "Builds vertical jump power through leg drive, ankle spring, arm swing timing, and quiet landing control.", cue: "Keep jumps crisp, land softly, and stop if knees, ankles, feet, or back feel sharp pain." };
+      }
+      if (lower.includes("line hop") || lower.includes("skater") || lower.includes("drop-step") || lower.includes("shuffle") || lower.includes("quick feet") || lower.includes("lateral") || lower.includes("diagonal")) {
+        return { muscles: "Glutes, quads, calves, ankles, hips, core", purpose: "Builds side-to-side power, cutting control, and safer stops.", cue: "Land with the knee over the toes and freeze before the next rep." };
+      }
+      if (lower.includes("squat") || lower.includes("wall sit") || lower.includes("lunge") || lower.includes("step") || lower.includes("stance") || lower.includes("snap") || lower.includes("landing score")) {
+        return { muscles: "Quads, glutes, hamstrings, calves", purpose: "Builds leg drive, defensive stance strength, and landing control.", cue: "Keep knees tracking over toes and ribs stacked over hips." };
+      }
+      if (lower.includes("bridge") || lower.includes("hip") || lower.includes("hinge")) {
+        return { muscles: "Glutes, hamstrings, deep core", purpose: "Supports hip power for sprinting, cutting, and rebounding.", cue: "Move from the hips first and keep the torso long." };
+      }
+      if (lower.includes("row") || lower.includes("pull-apart")) {
+        return { muscles: "Upper back, lats, rear shoulders, biceps", purpose: "Helps arm strength, posture, and rebound control.", cue: "Pull elbows toward ribs while shoulders stay relaxed." };
+      }
+      if (lower.includes("arm circles") || lower.includes("wall slides")) {
+        return { muscles: "Shoulders, upper back, shoulder blade stabilizers", purpose: "Prepares the arms for pressing, passing, and shooting.", cue: "Move the shoulders smoothly without flaring the ribs." };
+      }
+      if (lower.includes("curl")) {
+        return { muscles: "Biceps, forearms, grip", purpose: "Builds arm strength for ball control and contact balance.", cue: "Keep elbows near the body and avoid leaning back." };
+      }
+      if (lower.includes("triceps")) {
+        return { muscles: "Triceps, shoulders", purpose: "Supports stronger passing, shooting finish, and pushing strength.", cue: "Keep ribs down and press smoothly." };
+      }
+      if (lower.includes("push-up") || lower.includes("press")) {
+        return { muscles: "Chest, shoulders, triceps, core", purpose: "Builds upper-body strength for contact and ball protection.", cue: "Use an incline or floor setup that keeps the spine neutral." };
+      }
+      if (lower.includes("carry")) {
+        return { muscles: "Grip, forearms, shoulders, core, legs", purpose: "Improves total-body control for contact and rebounds.", cue: "Use equal light weights and walk tall." };
+      }
+      if (lower.includes("dead bug") || lower.includes("plank") || lower.includes("bird dog") || lower.includes("pallof")) {
+        return { muscles: "Deep core, obliques, glutes, shoulder stabilizers", purpose: "Builds trunk control for cutting, contact balance, and landing.", cue: "Slow down if hips or ribs wobble." };
+      }
+      if (lower.includes("calf")) {
+        return { muscles: "Calves, ankles, foot stabilizers", purpose: "Supports jumping, quick first steps, and deceleration.", cue: "Rise and lower slowly with balance support." };
+      }
+      if (lower.includes("interval") || lower.includes("bike") || lower.includes("walk") || lower.includes("jog") || lower.includes("footwork") || lower.includes("conditioning")) {
+        return { muscles: "Heart, lungs, quads, glutes, calves", purpose: "Builds conditioning for repeated jumps, sprints, defensive slides, and recovery between plays.", cue: "Choose bike, walking, or court intervals based on energy and available space." };
+      }
+      if (lower.includes("stretch") || lower.includes("breathing")) {
+        return { muscles: "Recovery, hips, calves, chest, hamstrings", purpose: "Helps cooldown, mobility, and relaxed posture.", cue: "Stay gentle and never force range of motion." };
+      }
+      if (lower.includes("ball") || lower.includes("free throw")) {
+        return { muscles: "Shoulders, forearms, legs, coordination", purpose: "Connects strength work to basketball skill under light fatigue.", cue: "Keep reps calm and stop before posture changes." };
+      }
+      return { muscles: "Full body control", purpose: "Supports jump skill, balance, and basketball movement quality.", cue: "Use controlled reps and neutral posture." };
+    }
+
+    function buildExerciseDescriptions() {
+      const byName = new Map();
+      Object.entries(plan).forEach(([day, workout]) => {
+        workout.segments.forEach(segment => {
+          segment.items.forEach(item => {
+            const existing = byName.get(item[0]);
+            if (existing) {
+              existing.workouts.push(day);
+              if (!existing.dose.includes(item[2])) existing.dose += ` / ${item[2]}`;
+              return;
+            }
+            byName.set(item[0], {
+              name: item[0],
+              workouts: [day],
+              dose: item[2],
+              ...describeExercise(item[0])
+            });
+          });
+        });
+      });
+      return [...byName.values()].sort((a, b) => a.name.localeCompare(b.name));
+    }
+
+    function renderDescriptions() {
+      const filters = [{ id: "all", label: "All" }, ...Object.keys(plan).map(day => ({ id: day, label: `Workout ${day}` }))];
+      descriptionFilters.innerHTML = filters.map(filter => `
+        <button class="description-filter" type="button" data-description-filter="${filter.id}" aria-pressed="${descriptionFilter === filter.id}">
+          ${filter.label}
+        </button>
+      `).join("");
+      const visible = exerciseDescriptions.filter(entry => descriptionFilter === "all" || entry.workouts.includes(descriptionFilter));
+      descriptionGrid.innerHTML = visible.map(entry => `
+        <article class="description-card">
+          <div>
+            <h3>${entry.name}</h3>
+            <div class="description-meta">
+              ${entry.workouts.map(day => `<span class="badge">Workout ${day}</span>`).join("")}
+              <span class="badge">${entry.dose}</span>
+            </div>
+          </div>
+          <p><strong>Muscles:</strong> ${entry.muscles}</p>
+          <p><strong>Jump + basketball carryover:</strong> ${entry.purpose}</p>
+          <p><strong>Form cue:</strong> ${entry.cue}</p>
+        </article>
+      `).join("");
+    }
+
+    function refreshSupportingViews() {
+      renderCalendar();
+      renderProgressView();
+      renderDescriptions();
+    }
+
+    function updatePainAlert() {
+      const pain = Number(painInput.value);
+      painAlert.classList.toggle("is-visible", Number.isFinite(pain) && pain > 2);
+    }
+
+    function updateSessionField(field, value) {
+      getSession()[field] = value;
+      saveState();
+      renderAthleteButtons();
+      renderCalendar();
+      renderProgressView();
+    }
+
+    function exportCsv() {
+      const rows = [["Athlete", "Age", "Week", "Workout", "Date", "Minutes", "Effort", "Discomfort", "Completed", "Total", "Notes"]];
+      athletes.forEach(athlete => {
+        weeks.forEach(week => {
+          Object.keys(plan).forEach(day => {
+            const session = peekSession(day, week, athlete.id);
+            const total = allItemsFor(day).length;
+            const done = checkedCount(day, week, activeIncludesOptional(), athlete.id);
+            rows.push([
+              athlete.name,
+              athlete.age,
+              week,
+              `${day} - ${plan[day].short}`,
+              session.date || "",
+              session.minutes || "",
+              session.rpe || "",
+              session.pain || "",
+              done,
+              total,
+              session.notes || ""
+            ]);
+          });
+        });
+      });
+      const csv = rows.map(row => row.map(cell => `"${String(cell).replaceAll('"', '""')}"`).join(",")).join("\n");
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "hayes-kids-individual-plyometric-progress.csv";
+      link.click();
+      URL.revokeObjectURL(link.href);
+    }
+
+    athleteGrid.addEventListener("click", event => {
+      const button = event.target.closest("[data-athlete]");
+      if (!button) return;
+      currentAthleteId = button.dataset.athlete;
+      saveState();
+      renderWorkout();
+    });
+
+    weekGrid.addEventListener("click", event => {
+      const button = event.target.closest("[data-week]");
+      if (!button) return;
+      currentWeek = Number(button.dataset.week);
+      saveState();
+      renderWeekButtons();
+      renderWorkout();
+    });
+
+    dayTabs.addEventListener("click", event => {
+      const button = event.target.closest("[data-day]");
+      if (!button) return;
+      currentDay = button.dataset.day;
+      saveState();
+      renderWorkout();
+    });
+
+    segmentList.addEventListener("change", event => {
+      if (!event.target.matches("[data-check]")) return;
+      getSession().checks[event.target.dataset.check] = event.target.checked;
+      saveState();
+      renderProgress();
+      renderAthleteButtons();
+      renderDayTabs();
+      renderCalendar();
+      renderProgressView();
+    });
+
+    document.querySelectorAll(".mode-btn").forEach(button => {
+      button.addEventListener("click", () => {
+        document.body.dataset.mode = button.dataset.mode;
+        document.querySelectorAll(".mode-btn").forEach(nextButton => {
+          nextButton.setAttribute("aria-pressed", String(nextButton === button));
+        });
+        renderProgress();
+        renderDayTabs();
+        renderProgressView();
+      });
+    });
+
+    dateInput.addEventListener("input", event => updateSessionField("date", event.target.value));
+    minutesInput.addEventListener("input", event => updateSessionField("minutes", event.target.value));
+    rpeInput.addEventListener("change", event => updateSessionField("rpe", event.target.value));
+    painInput.addEventListener("change", event => {
+      updateSessionField("pain", event.target.value);
+      updatePainAlert();
+    });
+    notesInput.addEventListener("input", event => updateSessionField("notes", event.target.value));
+
+    document.getElementById("resetSessionBtn").addEventListener("click", () => {
+      state.sessions[sessionKey()] = emptySession();
+      saveState();
+      renderWorkout();
+    });
+
+    viewTabs.forEach(tab => {
+      tab.addEventListener("click", () => switchView(tab.dataset.view));
+    });
+
+    document.getElementById("prevMonthBtn").addEventListener("click", () => {
+      calendarCursor = new Date(calendarCursor.getFullYear(), calendarCursor.getMonth() - 1, 1);
+      saveState();
+      renderCalendar();
+    });
+
+    document.getElementById("nextMonthBtn").addEventListener("click", () => {
+      calendarCursor = new Date(calendarCursor.getFullYear(), calendarCursor.getMonth() + 1, 1);
+      saveState();
+      renderCalendar();
+    });
+
+    document.getElementById("todayBtn").addEventListener("click", () => {
+      calendarCursor = new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);
+      selectedCalendarIso = toIso(todayDate);
+      saveState();
+      renderCalendar();
+    });
+
+    monthJump.addEventListener("change", event => {
+      const [year, month] = event.target.value.split("-").map(Number);
+      calendarCursor = new Date(year, month - 1, 1);
+      saveState();
+      renderCalendar();
+    });
+
+    calendarWorkoutTabs.addEventListener("click", event => {
+      const button = event.target.closest("[data-calendar-workout]");
+      if (!button) return;
+      currentDay = button.dataset.calendarWorkout;
+      saveState();
+      renderWeekButtons();
+      renderWorkout();
+      switchView("plan");
+    });
+
+    calendarGrid.addEventListener("click", event => {
+      const dayCell = event.target.closest("[data-date]");
+      if (dayCell) {
+        selectedCalendarIso = dayCell.dataset.date;
+        saveState();
+        renderCalendar();
+      }
+      const button = event.target.closest("[data-open-plan]");
+      if (!button) return;
+      openPlanFor(button.dataset.openPlan, button.dataset.date, button.dataset.week);
+    });
+
+    calendarSelected.addEventListener("click", event => {
+      const button = event.target.closest("[data-open-plan]");
+      if (!button) return;
+      openPlanFor(button.dataset.openPlan, button.dataset.date, button.dataset.week);
+    });
+
+    descriptionFilters.addEventListener("click", event => {
+      const button = event.target.closest("[data-description-filter]");
+      if (!button) return;
+      descriptionFilter = button.dataset.descriptionFilter;
+      saveState();
+      renderDescriptions();
+    });
+
+    document.getElementById("printBtn").addEventListener("click", () => window.print());
+    document.getElementById("exportBtn").addEventListener("click", exportCsv);
+
+    renderMonthOptions();
+    renderWeekButtons();
+    renderWorkout();
+    switchView(state.currentView || "plan", false);
+  </script>
+</body>
+</html>
