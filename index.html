@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="A youth plyometric workout tracker for the Hayes kids, with jump mechanics, ankle stiffness, soft landings, quickness, basketball carryover, safety notes, and progress logging.">
-  <title>Hayes Kids Plyometric Workout Tracker</title>
+  <meta name="description" content="A youth vertical jump and stability workout tracker for the Hayes kids, with equal focus on jump mechanics, ankle control, balance, soft landings, quickness, basketball carryover, safety notes, and progress logging.">
+  <title>Hayes Kids Vertical Jump + Stability Tracker</title>
   <style>
     :root {
       color-scheme: light;
@@ -1366,7 +1366,7 @@
 <body data-mode="30">
   <header class="topbar">
     <div class="shell topbar-inner">
-      <div class="brand" aria-label="Hayes Kids Plyometric Workout Tracker">
+      <div class="brand" aria-label="Hayes Kids Vertical Jump and Stability Tracker">
         <div class="mark" aria-hidden="true">
           <svg class="icon" viewBox="0 0 24 24">
             <circle cx="12" cy="12" r="9"></circle>
@@ -1378,7 +1378,7 @@
         </div>
         <div>
           <h1>Hayes Kids</h1>
-          <span>Plyometric workout tracker</span>
+          <span>Vertical jump + stability tracker</span>
         </div>
       </div>
       <div class="top-actions">
@@ -1401,9 +1401,10 @@
           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg>
           3 days per week
         </p>
-        <h2>Jump higher. Land softer.</h2>
-        <p>Six weeks of youth-friendly plyometric training for better vertical jump mechanics, quicker feet, ankle spring, and safer landings. Sessions are built for about 30 minutes, with an optional add-on that keeps the total under 45 minutes.</p>
+        <h2>Jump higher. Stay steadier.</h2>
+        <p>Six weeks with two equal priorities: increase vertical jump and increase stability. Every session pairs jump mechanics with ankle control, balance, controlled stops, and safer landings.</p>
         <div class="metric-strip" aria-label="Plan metrics">
+          <div class="metric"><strong>2 goals</strong><span>jump + stability</span></div>
           <div class="metric"><strong>30 min</strong><span>standard session</span></div>
           <div class="metric"><strong>45 min</strong><span>maximum with add-on</span></div>
           <div class="metric"><strong>1 day</strong><span>rest between jump days</span></div>
@@ -1428,7 +1429,7 @@
         </svg>
         <div class="court-caption">
           <strong>Training rhythm</strong>
-          <span>Warm up, land quietly, jump with control, recover well, and only progress when every rep looks clean.</span>
+          <span>Warm up, land quietly, hold every stop, recover well, and only progress when every rep looks clean.</span>
         </div>
       </div>
     </div>
@@ -1437,7 +1438,7 @@
   <section class="safety-band">
     <div class="shell safety-inner">
       <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 9v4"></path><path d="M12 17h.01"></path><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path></svg>
-      <p><strong>Training rule:</strong> this plan is for healthy youth athletes. Use adult supervision, warm up first, keep jump volume low, land quietly, and stop the session for sharp pain, dizziness, unusual symptoms, or form that breaks down.</p>
+      <p><strong>Training rule:</strong> vertical jump and stability are equal priorities. Use adult supervision, warm up first, keep jump volume low, land quietly, hold each landing, and stop the session for sharp pain, dizziness, unusual symptoms, or form that breaks down.</p>
     </div>
   </section>
 
@@ -1493,7 +1494,11 @@
           </li>
           <li>
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>
-            <span>Count clean landings, not max effort jumps. Rest enough that every rep still looks sharp.</span>
+            <span>Count clean landings, not max effort jumps. Every jump should finish with a balanced 2-second hold.</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>
+            <span>Do not increase jumps unless balance, stops, and landings are improving too.</span>
           </li>
           <li>
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>
@@ -1571,7 +1576,7 @@
             </div>
             <div class="field" style="grid-column: 1 / -1;">
               <label for="notesInput">Notes</label>
-              <textarea id="notesInput" placeholder="What felt springy? Any discomfort? How quiet were the landings?"></textarea>
+              <textarea id="notesInput" placeholder="What felt springy? Any discomfort? How quiet and balanced were the landings?"></textarea>
             </div>
           </div>
             <div class="pain-alert" id="painAlert">Discomfort is high. Stop the session, switch to easy walking and breathing, and check in with a parent before the next workout.</div>
@@ -1594,9 +1599,18 @@
             <div class="note-block">
               <h4>Progression</h4>
               <ul>
-                <li>Weeks 1-2: learn quiet landings and clean posture.</li>
-                <li>Weeks 3-4: add one rep only when landings stay soft.</li>
-                <li>Weeks 5-6: add one set to one jump drill or one short speed round.</li>
+                <li>Weeks 1-2: build jump rhythm and stable landings equally.</li>
+                <li>Weeks 3-4: add one rep only when jump form and balance both look clean.</li>
+                <li>Weeks 5-6: add one set to one jump drill or one stability drill, not both on the same day.</li>
+                <li>If jump height improves but landings wobble, repeat the week before progressing.</li>
+              </ul>
+            </div>
+            <div class="note-block">
+              <h4>Stability Booster</h4>
+              <ul>
+                <li>Use on 1-2 non-workout days if legs feel fresh.</li>
+                <li>Do single-leg balance, heel-to-toe walk, star taps, and quiet line taps.</li>
+                <li>Keep it easy: about 5 minutes, no max jumps.</li>
               </ul>
             </div>
             <div class="note-block">
@@ -1688,7 +1702,7 @@
           <div class="panel-head">
             <div>
               <h2>Exercise Description</h2>
-              <p>Each movement lists the main muscles worked, why it helps jumping and basketball, and the form cue to keep training clean.</p>
+              <p>Each movement lists the main muscles worked, why it helps vertical jump and stability, and the form cue to keep training clean.</p>
             </div>
             <span class="badge">muscles + cues</span>
           </div>
@@ -1715,10 +1729,10 @@
     const weeks = [1, 2, 3, 4, 5, 6];
     const plan = {
       A: {
-        short: "Landing mechanics + ankle spring",
-        title: "Workout A: Landing Mechanics + Ankle Spring",
-        summary: "Build the base for safe jumping: quiet landings, ankle stiffness, hip control, and low-volume vertical jump practice.",
-        badges: ["Soft landings", "Ankle spring", "Vertical prep", "Short intervals"],
+        short: "Stability base + jump mechanics",
+        title: "Workout A: Stability Base + Jump Mechanics",
+        summary: "Build jump mechanics and stability together: quiet landings, ankle stiffness, balance, hip control, and low-volume vertical jump practice.",
+        badges: ["Stability base", "Ankle spring", "Soft landings", "Vertical prep"],
         segments: [
           {
             name: "Warm-up",
@@ -1748,7 +1762,8 @@
             icon: "shield",
             items: [
               ["Dead bug heel tap", "Ribs quiet, slow exhale, controlled taps.", "2 x 5/side"],
-              ["Single-leg balance reach", "Stand tall, reach one hand forward, reset before wobbling.", "2 x 5/side"]
+              ["Single-leg balance reach", "Stand tall, reach one hand forward, reset before wobbling.", "2 x 5/side"],
+              ["Star balance taps", "Stand on one leg and lightly tap front, side, and back without rushing.", "2 x 3 each/side"]
             ]
           },
           {
@@ -1774,7 +1789,7 @@
             icon: "plus",
             optional: true,
             items: [
-              ["Vertical jump stick", "Jump at about 70%, land quietly, hold the landing.", "3 x 3"],
+              ["Vertical jump stick", "Jump at about 70%, land quietly, hold the landing for 2 seconds.", "3 x 3"],
               ["Line quick taps", "Tap both feet over a tape line with short, quiet contacts.", "3 x 10 sec"],
               ["Wall sit", "Shoulders and hips against wall, knees comfortable, breathe.", "2 x 25 sec"],
               ["Free throws after jumps", "Shoot calmly after the jump work.", "10 shots"]
@@ -1783,10 +1798,10 @@
         ]
       },
       B: {
-        short: "Lateral power + controlled stops",
-        title: "Workout B: Lateral Power + Controlled Stops",
-        summary: "Train side-to-side quickness, single-leg balance, landing control, and deceleration for safer cuts and sharper changes of direction.",
-        badges: ["Lateral hops", "Balance", "Deceleration", "Quick feet"],
+        short: "Lateral stability + power",
+        title: "Workout B: Lateral Stability + Power",
+        summary: "Train power and control together: side-to-side quickness, single-leg balance, landing control, and deceleration for safer cuts and sharper changes of direction.",
+        badges: ["Lateral power", "Balance", "Deceleration", "Stable stops"],
         segments: [
           {
             name: "Warm-up",
@@ -1807,6 +1822,7 @@
               ["Skater step hold", "Step wide like a skater, freeze balanced before returning.", "2 x 5/side"],
               ["Drop-step freeze", "Open one hip, take one drop step, stop balanced.", "2 x 5/side"],
               ["Single-leg hip hinge reach", "Reach hips back, torso long, balance first.", "2 x 6/side"],
+              ["Single-leg stick landing", "Step off one foot into a tiny hop, land on two feet, freeze tall.", "2 x 3/side"],
               ["Incline push-up", "Hands on bench or counter, body straight.", "2 x 8"]
             ]
           },
@@ -1851,10 +1867,10 @@
         ]
       },
       C: {
-        short: "Vertical jump + approach footwork",
-        title: "Workout C: Vertical Jump + Approach Footwork",
-        summary: "Connect takeoff mechanics, arm swing timing, approach steps, and landing control without turning the day into a max-jump test.",
-        badges: ["Vertical jump", "Approach steps", "Arm swing", "Recovery"],
+        short: "Vertical jump + stable landings",
+        title: "Workout C: Vertical Jump + Stable Landings",
+        summary: "Train vertical jump and post-jump stability together: takeoff mechanics, arm swing timing, approach steps, landing control, and balance without turning the day into a max-jump test.",
+        badges: ["Vertical jump", "Stable landings", "Approach steps", "Balance"],
         segments: [
           {
             name: "Warm-up",
@@ -1885,7 +1901,8 @@
             items: [
               ["Bench plank", "Elbows on bench, breathe, no sagging.", "2 x 25 sec"],
               ["Side plank from knees", "Straight line shoulder to hip to knee.", "1 x 20 sec/side"],
-              ["Landing score check", "Rate landings: quiet feet, knees over toes, balanced finish.", "5 reps"]
+              ["Landing score check", "Rate landings: quiet feet, knees over toes, balanced finish.", "5 reps"],
+              ["Single-leg balance hold", "Stand on one leg with soft knee and tall chest; switch sides.", "2 x 20 sec/side"]
             ]
           },
           {
@@ -2409,6 +2426,9 @@
       if (lower.includes("vertical jump") || lower.includes("countermovement") || lower.includes("plyometric") || lower.includes("pogo") || lower.includes("approach jump") || lower.includes("squat-to-calf") || lower.includes("broad jump")) {
         return { muscles: "Glutes, quads, calves, ankles, core", purpose: "Builds vertical jump power through leg drive, ankle spring, arm swing timing, and quiet landing control.", cue: "Keep jumps crisp, land softly, and stop if knees, ankles, feet, or back feel sharp pain." };
       }
+      if (lower.includes("balance") || lower.includes("star") || lower.includes("stick landing")) {
+        return { muscles: "Feet, ankles, calves, glutes, hips, core", purpose: "Improves stability for safer landings, stronger cuts, cleaner stops, and better control after jumping.", cue: "Move slowly, keep the knee over the toes, and reset before wobbling becomes sloppy." };
+      }
       if (lower.includes("line hop") || lower.includes("skater") || lower.includes("drop-step") || lower.includes("shuffle") || lower.includes("quick feet") || lower.includes("lateral") || lower.includes("diagonal")) {
         return { muscles: "Glutes, quads, calves, ankles, hips, core", purpose: "Builds side-to-side power, cutting control, and safer stops.", cue: "Land with the knee over the toes and freeze before the next rep." };
       }
@@ -2495,7 +2515,7 @@
             </div>
           </div>
           <p><strong>Muscles:</strong> ${entry.muscles}</p>
-          <p><strong>Jump + basketball carryover:</strong> ${entry.purpose}</p>
+          <p><strong>Jump + stability carryover:</strong> ${entry.purpose}</p>
           <p><strong>Form cue:</strong> ${entry.cue}</p>
         </article>
       `).join("");
