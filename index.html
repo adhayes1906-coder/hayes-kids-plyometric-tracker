@@ -1707,9 +1707,9 @@
           <div class="panel-head">
             <div>
               <h2>Exercise Description</h2>
-              <p>Each movement lists the main muscles worked, why it helps vertical jump and stability, and the form cue to keep training clean.</p>
+              <p>Each movement shows how to perform it, what it improves, and the form cue to keep training clean.</p>
             </div>
-            <span class="badge">muscles + cues</span>
+            <span class="badge">how + improves</span>
           </div>
           <div class="description-toolbar" id="descriptionFilters"></div>
           <div class="description-grid" id="descriptionGrid"></div>
@@ -2432,57 +2432,66 @@
     function describeExercise(name) {
       const lower = name.toLowerCase();
       if (lower.includes("box")) {
-        return { muscles: "Glutes, quads, calves, ankles, hips, core", purpose: "Builds vertical jump power and stability by practicing quiet landings, knee control, and balanced finishes on a low box.", cue: "Use a low sturdy box, land quietly, hold the landing, and step down instead of jumping down." };
+        if (lower.includes("step-off")) {
+          return { muscles: "Glutes, quads, calves, ankles, hips, core", how: "Stand tall on a low sturdy box, step off with control, land on both feet in athletic stance, hold 2 seconds, then reset.", purpose: "Improves landing stability, knee control, ankle control, and confidence absorbing force after a jump.", cue: "Step off, do not jump down. Land quietly with knees over toes and chest tall." };
+        }
+        if (lower.includes("lateral")) {
+          return { muscles: "Glutes, quads, hips, calves, ankles, core", how: "Stand sideways on a low box, slowly lower the outside heel toward the floor, lightly tap, then stand back up without collapsing the knee inward.", purpose: "Improves single-leg stability, hip control, knee tracking, and safer cutting or defensive slides.", cue: "Move slowly and keep the working knee lined up over the toes." };
+        }
+        if (lower.includes("quality")) {
+          return { muscles: "Glutes, quads, calves, ankles, hips, core", how: "Do a low box jump, land on the box, pause, then score the landing for quiet feet, knees over toes, and balanced finish.", purpose: "Improves landing awareness, stability after jumping, and the ability to self-check form before progressing.", cue: "If the landing is loud or wobbly, lower the box or stop the set." };
+        }
+        return { muscles: "Glutes, quads, calves, ankles, hips, core", how: "Stand close to a low sturdy box, jump up with two feet, land softly in athletic stance, hold 2 seconds, then step down one foot at a time.", purpose: "Improves vertical jump power and stability by practicing explosive takeoff with quiet, controlled landings.", cue: "Jump onto the box, hold the landing, and step down instead of jumping down." };
       }
       if (lower.includes("vertical jump") || lower.includes("countermovement") || lower.includes("plyometric") || lower.includes("pogo") || lower.includes("approach jump") || lower.includes("squat-to-calf") || lower.includes("broad jump")) {
-        return { muscles: "Glutes, quads, calves, ankles, core", purpose: "Builds vertical jump power through leg drive, ankle spring, arm swing timing, and quiet landing control.", cue: "Keep jumps crisp, land softly, and stop if knees, ankles, feet, or back feel sharp pain." };
+        return { muscles: "Glutes, quads, calves, ankles, core", how: "Use a quick athletic dip, drive through the floor, swing the arms with control, land softly, and hold the finish before the next rep.", purpose: "Improves vertical jump power, ankle spring, arm swing timing, and landing control.", cue: "Keep jumps crisp, land softly, and stop if knees, ankles, feet, or back feel sharp pain." };
       }
       if (lower.includes("balance") || lower.includes("star") || lower.includes("stick landing")) {
-        return { muscles: "Feet, ankles, calves, glutes, hips, core", purpose: "Improves stability for safer landings, stronger cuts, cleaner stops, and better control after jumping.", cue: "Move slowly, keep the knee over the toes, and reset before wobbling becomes sloppy." };
+        return { muscles: "Feet, ankles, calves, glutes, hips, core", how: "Move slowly, keep the standing foot rooted, reach or hold without rushing, and reset when balance breaks.", purpose: "Improves stability for safer landings, stronger cuts, cleaner stops, and better control after jumping.", cue: "Keep the knee over the toes and reset before wobbling becomes sloppy." };
       }
       if (lower.includes("line hop") || lower.includes("skater") || lower.includes("drop-step") || lower.includes("shuffle") || lower.includes("quick feet") || lower.includes("lateral") || lower.includes("diagonal")) {
-        return { muscles: "Glutes, quads, calves, ankles, hips, core", purpose: "Builds side-to-side power, cutting control, and safer stops.", cue: "Land with the knee over the toes and freeze before the next rep." };
+        return { muscles: "Glutes, quads, calves, ankles, hips, core", how: "Move side to side with short controlled contacts, land in athletic position, freeze the stop, then repeat only when balanced.", purpose: "Improves side-to-side power, cutting control, deceleration, and safer stops.", cue: "Land with the knee over the toes and freeze before the next rep." };
       }
       if (lower.includes("squat") || lower.includes("wall sit") || lower.includes("lunge") || lower.includes("step") || lower.includes("stance") || lower.includes("snap") || lower.includes("landing score")) {
-        return { muscles: "Quads, glutes, hamstrings, calves", purpose: "Builds leg drive, defensive stance strength, and landing control.", cue: "Keep knees tracking over toes and ribs stacked over hips." };
+        return { muscles: "Quads, glutes, hamstrings, calves", how: "Keep feet planted, hips back, chest tall, and move through a range that stays smooth and controlled.", purpose: "Improves leg drive, defensive stance strength, deceleration, and landing control.", cue: "Keep knees tracking over toes and ribs stacked over hips." };
       }
       if (lower.includes("bridge") || lower.includes("hip") || lower.includes("hinge")) {
-        return { muscles: "Glutes, hamstrings, deep core", purpose: "Supports hip power for sprinting, cutting, and rebounding.", cue: "Move from the hips first and keep the torso long." };
+        return { muscles: "Glutes, hamstrings, deep core", how: "Brace lightly, move from the hips, keep the torso long, and pause when control starts to fade.", purpose: "Improves hip power for jumping, sprinting, cutting, and rebounding.", cue: "Move from the hips first and keep the torso long." };
       }
       if (lower.includes("row") || lower.includes("pull-apart")) {
-        return { muscles: "Upper back, lats, rear shoulders, biceps", purpose: "Helps arm strength, posture, and rebound control.", cue: "Pull elbows toward ribs while shoulders stay relaxed." };
+        return { muscles: "Upper back, lats, rear shoulders, biceps", how: "Start tall, pull with the back and arms, pause briefly, then return with control.", purpose: "Improves posture, arm strength, and rebound or contact control.", cue: "Pull elbows toward ribs while shoulders stay relaxed." };
       }
       if (lower.includes("arm circles") || lower.includes("wall slides")) {
-        return { muscles: "Shoulders, upper back, shoulder blade stabilizers", purpose: "Prepares the arms for pressing, passing, and shooting.", cue: "Move the shoulders smoothly without flaring the ribs." };
+        return { muscles: "Shoulders, upper back, shoulder blade stabilizers", how: "Move the arms through a smooth pain-free range while keeping ribs down and posture tall.", purpose: "Improves shoulder readiness for jumping arm swing, passing, and shooting.", cue: "Move the shoulders smoothly without flaring the ribs." };
       }
       if (lower.includes("curl")) {
-        return { muscles: "Biceps, forearms, grip", purpose: "Builds arm strength for ball control and contact balance.", cue: "Keep elbows near the body and avoid leaning back." };
+        return { muscles: "Biceps, forearms, grip", how: "Keep elbows near the ribs, curl smoothly, squeeze lightly at the top, and lower under control.", purpose: "Improves arm strength for ball control and contact balance.", cue: "Keep elbows near the body and avoid leaning back." };
       }
       if (lower.includes("triceps")) {
-        return { muscles: "Triceps, shoulders", purpose: "Supports stronger passing, shooting finish, and pushing strength.", cue: "Keep ribs down and press smoothly." };
+        return { muscles: "Triceps, shoulders", how: "Keep elbows tucked, press smoothly, pause briefly, and return without letting the shoulders shrug.", purpose: "Improves passing strength, shooting finish, and pushing control.", cue: "Keep ribs down and press smoothly." };
       }
       if (lower.includes("push-up") || lower.includes("press")) {
-        return { muscles: "Chest, shoulders, triceps, core", purpose: "Builds upper-body strength for contact and ball protection.", cue: "Use an incline or floor setup that keeps the spine neutral." };
+        return { muscles: "Chest, shoulders, triceps, core", how: "Use a comfortable incline or floor position, keep the body straight, lower with control, and press back up.", purpose: "Improves upper-body strength for contact, ball protection, and controlled landings.", cue: "Use a setup that keeps the spine neutral." };
       }
       if (lower.includes("carry")) {
-        return { muscles: "Grip, forearms, shoulders, core, legs", purpose: "Improves total-body control for contact and rebounds.", cue: "Use equal light weights and walk tall." };
+        return { muscles: "Grip, forearms, shoulders, core, legs", how: "Hold equal light weights, walk slowly, keep shoulders level, and breathe without leaning.", purpose: "Improves total-body control for contact, rebounds, and posture under fatigue.", cue: "Use equal light weights and walk tall." };
       }
       if (lower.includes("dead bug") || lower.includes("plank") || lower.includes("bird dog") || lower.includes("pallof")) {
-        return { muscles: "Deep core, obliques, glutes, shoulder stabilizers", purpose: "Builds trunk control for cutting, contact balance, and landing.", cue: "Slow down if hips or ribs wobble." };
+        return { muscles: "Deep core, obliques, glutes, shoulder stabilizers", how: "Brace gently, move slowly, breathe, and keep hips and ribs from rocking or twisting.", purpose: "Improves trunk control for cutting, contact balance, jumping, and landing.", cue: "Slow down if hips or ribs wobble." };
       }
       if (lower.includes("calf")) {
-        return { muscles: "Calves, ankles, foot stabilizers", purpose: "Supports jumping, quick first steps, and deceleration.", cue: "Rise and lower slowly with balance support." };
+        return { muscles: "Calves, ankles, foot stabilizers", how: "Rise onto the balls of the feet, pause tall, then lower slowly while staying balanced.", purpose: "Improves ankle spring for jumping, quick first steps, and deceleration.", cue: "Rise and lower slowly with balance support." };
       }
       if (lower.includes("interval") || lower.includes("bike") || lower.includes("walk") || lower.includes("jog") || lower.includes("footwork") || lower.includes("conditioning")) {
-        return { muscles: "Heart, lungs, quads, glutes, calves", purpose: "Builds conditioning for repeated jumps, sprints, defensive slides, and recovery between plays.", cue: "Choose bike, walking, or court intervals based on energy and available space." };
+        return { muscles: "Heart, lungs, quads, glutes, calves", how: "Alternate the work and recovery times listed, keeping posture clean and effort controlled.", purpose: "Improves conditioning for repeated jumps, sprints, defensive slides, and recovery between plays.", cue: "Choose bike, walking, or court intervals based on energy and available space." };
       }
       if (lower.includes("stretch") || lower.includes("breathing")) {
-        return { muscles: "Recovery, hips, calves, chest, hamstrings", purpose: "Helps cooldown, mobility, and relaxed posture.", cue: "Stay gentle and never force range of motion." };
+        return { muscles: "Recovery, hips, calves, chest, hamstrings", how: "Move gently into the stretch or breathing reset, hold without forcing, and let the heart rate come down.", purpose: "Improves cooldown, mobility, recovery, and relaxed posture.", cue: "Stay gentle and never force range of motion." };
       }
       if (lower.includes("ball") || lower.includes("free throw")) {
-        return { muscles: "Shoulders, forearms, legs, coordination", purpose: "Connects strength work to basketball skill under light fatigue.", cue: "Keep reps calm and stop before posture changes." };
+        return { muscles: "Shoulders, forearms, legs, coordination", how: "Use calm basketball reps after the workout work, keeping posture and breathing under control.", purpose: "Improves skill transfer under light fatigue without turning the day into extra conditioning.", cue: "Keep reps calm and stop before posture changes." };
       }
-      return { muscles: "Full body control", purpose: "Supports jump skill, balance, and basketball movement quality.", cue: "Use controlled reps and neutral posture." };
+      return { muscles: "Full body control", how: "Move with control, use the listed dose, and stop before form breaks down.", purpose: "Improves jump skill, balance, and basketball movement quality.", cue: "Use controlled reps and neutral posture." };
     }
 
     function buildExerciseDescriptions() {
@@ -2509,13 +2518,13 @@
     }
 
     function renderDescriptions() {
-      const filters = [{ id: "all", label: "All" }, ...Object.keys(plan).map(day => ({ id: day, label: `Workout ${day}` }))];
+      const filters = [{ id: "all", label: "All" }, { id: "box", label: "Box" }, ...Object.keys(plan).map(day => ({ id: day, label: `Workout ${day}` }))];
       descriptionFilters.innerHTML = filters.map(filter => `
         <button class="description-filter" type="button" data-description-filter="${filter.id}" aria-pressed="${descriptionFilter === filter.id}">
           ${filter.label}
         </button>
       `).join("");
-      const visible = exerciseDescriptions.filter(entry => descriptionFilter === "all" || entry.workouts.includes(descriptionFilter));
+      const visible = exerciseDescriptions.filter(entry => descriptionFilter === "all" || (descriptionFilter === "box" && entry.name.toLowerCase().includes("box")) || entry.workouts.includes(descriptionFilter));
       descriptionGrid.innerHTML = visible.map(entry => `
         <article class="description-card">
           <div>
@@ -2526,7 +2535,8 @@
             </div>
           </div>
           <p><strong>Muscles:</strong> ${entry.muscles}</p>
-          <p><strong>Jump + stability carryover:</strong> ${entry.purpose}</p>
+          <p><strong>How to do it:</strong> ${entry.how}</p>
+          <p><strong>Improves:</strong> ${entry.purpose}</p>
           <p><strong>Form cue:</strong> ${entry.cue}</p>
         </article>
       `).join("");
