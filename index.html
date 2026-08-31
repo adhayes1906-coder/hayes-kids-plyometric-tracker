@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="A youth vertical jump and stability workout tracker for the Hayes kids, with equal focus on jump mechanics, a low plyometric box, ankle control, balance, soft landings, quickness, basketball carryover, safety notes, and progress logging.">
-  <title>Hayes Kids Vertical Jump + Stability Tracker</title>
+  <meta name="description" content="An at-home youth basketball vertical-jump, stability, upper-body strength, and separate 200/400m sprint workout tracker for the Hayes kids, with low-box work, sprint timeline, alignment notes, safety guidance, and progress logging.">
+  <title>Hayes Kids Jump + Sprint + Stability + Strength Tracker</title>
   <style>
     :root {
       color-scheme: light;
@@ -321,7 +321,7 @@
 
     .view-tabs {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 8px;
       margin-bottom: 18px;
       padding: 8px;
@@ -336,12 +336,20 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
+      min-width: 0;
       min-height: 44px;
       padding: 0 12px;
       border-radius: var(--radius);
       color: var(--ink);
       background: transparent;
       font-weight: 800;
+      line-height: 1.12;
+      text-align: center;
+    }
+
+    .view-tab span {
+      min-width: 0;
+      overflow-wrap: anywhere;
     }
 
     .view-tab svg {
@@ -368,6 +376,7 @@
     .notes-panel,
     .calendar-panel,
     .progress-panel,
+    .sprint-panel,
     .description-panel {
       border: 1px solid var(--line);
       border-radius: var(--radius);
@@ -727,6 +736,39 @@
       font-size: 0.83rem;
     }
 
+    .exercise-main .exercise-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 7px;
+    }
+
+    .exercise-main .exercise-tag {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      min-height: 22px;
+      padding: 0 7px;
+      border-radius: 999px;
+      color: var(--teal-dark);
+      background: var(--green-soft);
+      border: 1px solid rgba(15, 118, 110, 0.14);
+      font-size: 0.71rem;
+      font-weight: 850;
+    }
+
+    .exercise-main .exercise-tag.is-box {
+      color: #6f4a04;
+      background: var(--gold-soft);
+      border-color: rgba(217, 119, 6, 0.22);
+    }
+
+    .exercise-main .exercise-tag.is-sprint {
+      color: #1d4ed8;
+      background: #eaf1ff;
+      border-color: rgba(37, 99, 235, 0.18);
+    }
+
     .dose {
       justify-self: end;
       min-width: 112px;
@@ -755,9 +797,52 @@
 
     .calendar-panel,
     .progress-panel,
+    .sprint-panel,
     .description-panel {
       overflow: hidden;
       padding: 16px;
+    }
+
+    .sprint-panel {
+      display: grid;
+      gap: 16px;
+    }
+
+    .timeline-grid,
+    .alignment-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .timeline-card,
+    .alignment-card {
+      display: grid;
+      gap: 7px;
+      min-height: 128px;
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+    }
+
+    .timeline-card.is-current {
+      border-color: var(--teal);
+      box-shadow: inset 0 0 0 2px rgba(15, 118, 110, 0.14);
+    }
+
+    .timeline-card h3,
+    .alignment-card h3 {
+      margin: 0;
+      font-size: 0.96rem;
+      line-height: 1.18;
+    }
+
+    .timeline-card p,
+    .alignment-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.86rem;
     }
 
     .panel-head {
@@ -1222,6 +1307,8 @@
       .log-grid,
       .notes-grid,
       .stat-grid,
+      .timeline-grid,
+      .alignment-grid,
       .description-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
@@ -1257,6 +1344,8 @@
       .notes-grid,
       .stat-grid,
       .workout-day-tabs,
+      .timeline-grid,
+      .alignment-grid,
       .description-grid {
         grid-template-columns: 1fr;
       }
@@ -1349,6 +1438,7 @@
       .notes-panel,
       .calendar-panel,
       .progress-panel,
+      .sprint-panel,
       .description-panel,
       .overview,
       .court-panel {
@@ -1366,7 +1456,7 @@
 <body data-mode="30">
   <header class="topbar">
     <div class="shell topbar-inner">
-      <div class="brand" aria-label="Hayes Kids Vertical Jump and Stability Tracker">
+      <div class="brand" aria-label="Hayes Kids Jump, Sprint, Stability, and Upper Body Strength Tracker">
         <div class="mark" aria-hidden="true">
           <svg class="icon" viewBox="0 0 24 24">
             <circle cx="12" cy="12" r="9"></circle>
@@ -1378,7 +1468,7 @@
         </div>
         <div>
           <h1>Hayes Kids</h1>
-          <span>Vertical jump + stability tracker</span>
+          <span>Jump + sprint + stability + strength</span>
         </div>
       </div>
       <div class="top-actions">
@@ -1401,10 +1491,10 @@
           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg>
           3 days per week
         </p>
-        <h2>Jump higher. Stay steadier.</h2>
-        <p>Six weeks with two equal priorities: increase vertical jump and increase stability. Every session pairs jump mechanics with ankle control, balance, controlled stops, safer landings, and low-box work.</p>
+        <h2>Jump higher. Sprint stronger. Stay steadier.</h2>
+        <p>Six weeks of at-home training with two separate workout tabs: a basketball vertical-jump plan and a 200/400m sprint plan. The basketball work stays focused on jump, stability, and upper-body strength, while the sprint tab handles acceleration, curve control, rhythm, and speed endurance.</p>
         <div class="metric-strip" aria-label="Plan metrics">
-          <div class="metric"><strong>2 goals</strong><span>jump + stability</span></div>
+          <div class="metric"><strong>2 tabs</strong><span>basketball + sprint</span></div>
           <div class="metric"><strong>30 min</strong><span>standard session</span></div>
           <div class="metric"><strong>45 min</strong><span>maximum with add-on</span></div>
           <div class="metric"><strong>1 day</strong><span>rest between jump days</span></div>
@@ -1429,7 +1519,7 @@
         </svg>
         <div class="court-caption">
           <strong>Training rhythm</strong>
-          <span>Warm up, land quietly, hold every stop, recover well, and only progress when every rep looks clean.</span>
+          <span>Warm up, land quietly, hold every stop, sprint relaxed, recover well, and only progress when every rep looks clean.</span>
         </div>
       </div>
     </div>
@@ -1438,7 +1528,7 @@
   <section class="safety-band">
     <div class="shell safety-inner">
       <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 9v4"></path><path d="M12 17h.01"></path><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path></svg>
-      <p><strong>Training rule:</strong> vertical jump and stability are equal priorities. Use adult supervision, warm up first, keep jump volume low, land quietly, hold each landing, use only a low sturdy box, and stop the session for sharp pain, dizziness, unusual symptoms, or form that breaks down.</p>
+      <p><strong>Training rule:</strong> keep the basketball workout and sprint workout separate when possible. Use adult supervision, warm up first, keep jump volume low, avoid all-out indoor sprinting, use only a low sturdy box, and stop for sharp pain, dizziness, unusual symptoms, or form that breaks down.</p>
     </div>
   </section>
 
@@ -1447,7 +1537,11 @@
       <div class="view-tabs" role="tablist" aria-label="Tracker sections">
         <button class="view-tab" type="button" role="tab" data-view="plan" aria-selected="true">
           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6v12"></path><path d="M18 6v12"></path><path d="M6 12h12"></path><path d="M3 9v6"></path><path d="M21 9v6"></path></svg>
-          <span>Workout Plan</span>
+          <span>Basketball Workout</span>
+        </button>
+        <button class="view-tab" type="button" role="tab" data-view="sprint" aria-selected="false">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19h16"></path><path d="M7 16l3-7 4 4 3-9"></path><path d="M10 9h4"></path><path d="M14 13h3"></path></svg>
+          <span>Sprint Workout</span>
         </button>
         <button class="view-tab" type="button" role="tab" data-view="calendar" aria-selected="false">
           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M3 10h18"></path></svg>
@@ -1498,11 +1592,19 @@
           </li>
           <li>
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>
-            <span>Do not increase jumps unless balance, stops, and landings are improving too.</span>
+            <span>Do not increase jump work unless balance, stops, and landings are improving too.</span>
           </li>
           <li>
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>
             <span>For box work, jump onto the box, land and stick, then step down. Do not jump down.</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>
+            <span>Every workout includes an upper-body push, pull, or carry using home equipment.</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>
+            <span>Use the Sprint Workout tab for the separate 200/400m sprint plan.</span>
           </li>
           <li>
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>
@@ -1603,9 +1705,9 @@
             <div class="note-block">
               <h4>Progression</h4>
               <ul>
-                <li>Weeks 1-2: build jump rhythm and stable landings equally.</li>
-                <li>Weeks 3-4: add one rep only when jump form and balance both look clean.</li>
-                <li>Weeks 5-6: add one set to one jump drill or one stability drill, not both on the same day.</li>
+                <li>Weeks 1-2: build jump rhythm, stable landings, and clean upper-body form.</li>
+                <li>Weeks 3-4: add one rep only when jump form, balance, and push/pull form all look clean.</li>
+                <li>Weeks 5-6: add one set to one jump drill, one stability drill, or one upper-body drill, not all on the same day.</li>
                 <li>If jump height improves but landings wobble, repeat the week before progressing.</li>
               </ul>
             </div>
@@ -1618,12 +1720,23 @@
               </ul>
             </div>
             <div class="note-block">
+              <h4>Sprint Alignment</h4>
+              <ul>
+                <li>Basketball jumping supports ankle stiffness, hip drive, and elastic takeoff for sprinting.</li>
+                <li>Landing and balance work supports safe deceleration and curve control.</li>
+                <li>Use the separate Sprint Workout tab for the full 200/400m plan and timeline.</li>
+              </ul>
+            </div>
+            <div class="note-block">
               <h4>Equipment</h4>
               <ul>
-                <li>Tape line, cones or shoes for markers, and a basketball.</li>
                 <li>Low sturdy plyometric box, low step, or bottom stair for box work.</li>
+                <li>Resistance band or mini-band for rows, pull-aparts, presses, and anti-rotation work.</li>
+                <li>Light dumbbells, water jugs, or a backpack for floor press, carries, curls, and rows.</li>
+                <li>Sturdy chair, counter, or wall for incline push-ups and balance support.</li>
+                <li>Tape line, cones or shoes for markers, basketball, mat or towel, water, and open space.</li>
+                <li>Safe flat 10-30 yard outdoor lane only if using sprint build-ups or sprint-float add-ons.</li>
                 <li>Start around 6-12 inches. Choose a height they can land on quietly without knees caving in.</li>
-                <li>Water, open space, and shoes with good traction.</li>
               </ul>
             </div>
           </div>
@@ -1632,12 +1745,103 @@
     </div>
       </section>
 
+      <section class="view-panel" id="view-sprint" role="tabpanel">
+        <div class="app-grid">
+          <aside class="side-panel" aria-label="Sprint plan controls">
+            <div class="section-title">
+              <h3>Kid</h3>
+              <span class="small-muted">sprint progress</span>
+            </div>
+            <div class="athlete-grid" id="sprintAthleteGrid"></div>
+
+            <div class="section-title">
+              <h3>Week</h3>
+              <span class="small-muted">timeline</span>
+            </div>
+            <div class="week-grid" id="sprintWeekGrid"></div>
+
+            <div class="section-title">
+              <h3>Sprint Day</h3>
+              <span class="small-muted">A/B/C</span>
+            </div>
+            <div class="day-tabs" id="sprintDayTabs" role="tablist" aria-label="Sprint workout days"></div>
+
+            <div class="section-title">
+              <h3>Sprint Rules</h3>
+            </div>
+            <ul class="rule-list">
+              <li>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>
+                <span>Sprint work is separate from the basketball workout. Do it on its own day when possible.</span>
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>
+                <span>Use a safe flat outdoor lane for running reps, or choose the wall-drive, march, bike, shuttle, or fast-walk substitute.</span>
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>
+                <span>Fast but relaxed is the goal. Stop when posture, arm action, or landing control breaks down.</span>
+              </li>
+            </ul>
+          </aside>
+
+          <div class="content-stack">
+            <section class="workout-panel" aria-live="polite">
+              <div class="workout-head">
+                <div class="workout-title-row">
+                  <div>
+                    <h2 id="sprintWorkoutTitle"></h2>
+                    <p id="sprintWorkoutSummary"></p>
+                  </div>
+                  <div class="progress-wrap">
+                    <div class="progress-meta">
+                      <span>Sprint progress</span>
+                      <span id="sprintProgressText">0%</span>
+                    </div>
+                    <div class="progress-track" aria-hidden="true">
+                      <div class="progress-bar" id="sprintProgressBar"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="badge-row" id="sprintBadgeRow"></div>
+                <div class="mode-row" aria-label="Sprint session length">
+                  <button class="mode-btn" type="button" data-mode="30" aria-pressed="true">30 min</button>
+                  <button class="mode-btn" type="button" data-mode="45" aria-pressed="false">Optional 45 min</button>
+                  <span class="small-muted">Use the longer option only when legs feel fresh and mechanics stay clean.</span>
+                </div>
+              </div>
+              <div class="segment-list" id="sprintSegmentList"></div>
+            </section>
+
+            <section class="sprint-panel">
+              <div class="panel-head">
+                <div>
+                  <h2>Sprinter Timeline</h2>
+                  <p>Suggested six-week 200/400m timeline: build mechanics first, then rhythm, curve control, speed endurance, and a lighter sharpen week.</p>
+                </div>
+                <span class="badge">6 weeks</span>
+              </div>
+              <div class="timeline-grid" id="sprintTimelineGrid"></div>
+
+              <div class="panel-head" style="margin-top: 8px;">
+                <div>
+                  <h2>Basketball Alignment</h2>
+                  <p>The plans stay separate, but these qualities overlap when the kids are moving well.</p>
+                </div>
+                <span class="badge">shared qualities</span>
+              </div>
+              <div class="alignment-grid" id="sprintAlignmentGrid"></div>
+            </section>
+          </div>
+        </div>
+      </section>
+
       <section class="view-panel" id="view-calendar" role="tabpanel">
         <div class="calendar-panel">
           <div class="panel-head">
             <div>
-              <h2>Workout Calendar</h2>
-              <p>Matches the previous kids tracker flow: planned workout dates, Workout A/B/C tabs, and Plan buttons that open the right session.</p>
+              <h2>Basketball Workout Calendar</h2>
+              <p>Matches the previous kids tracker flow: planned basketball Workout A/B/C dates and Plan buttons that open the right session.</p>
             </div>
             <span class="badge">Monday / Wednesday / Friday</span>
           </div>
@@ -1648,7 +1852,7 @@
             </button>
             <div class="calendar-title">
               <h2 id="calendarTitle">Month</h2>
-              <p>Tap Plan inside a workout date to open that full workout plan.</p>
+              <p>Tap Plan inside a basketball workout date to open that full workout plan.</p>
             </div>
             <button class="text-button" type="button" id="nextMonthBtn" title="Next month">
               Next
@@ -1707,7 +1911,7 @@
           <div class="panel-head">
             <div>
               <h2>Exercise Description</h2>
-              <p>Each movement shows how to perform it, what it improves, and the form cue to keep training clean.</p>
+              <p>Each movement shows how to perform it, what it improves, and the form cue to keep jump and sprint training clean.</p>
             </div>
             <span class="badge">how + improves</span>
           </div>
@@ -1720,12 +1924,13 @@
 
   <footer class="sources">
     <div class="shell">
-      Training references used: <a href="https://publications.aap.org/pediatrics/article/145/6/e20201011/76942/Resistance-Training-for-Children-and-Adolescents">AAP youth resistance training guidance</a>, <a href="https://www.nsca.com/education/articles/kinetic-select/plyometric-exercises/">NSCA plyometric programming guidance</a>, and <a href="https://www.cdc.gov/physical-activity-basics/guidelines/children.html">CDC child activity guidance</a>.
+      Training references used: <a href="https://publications.aap.org/pediatrics/article/145/6/e20201011/76942/Resistance-Training-for-Children-and-Adolescents">AAP youth resistance training guidance</a>, <a href="https://www.nsca.com/education/articles/kinetic-select/plyometric-exercises/">NSCA plyometric programming guidance</a>, <a href="https://www.nsca.com/education/articles/kinetic-select/sprinting-mechanics-and-technique/">NSCA sprint mechanics guidance</a>, and <a href="https://www.cdc.gov/physical-activity-basics/guidelines/children.html">CDC child activity guidance</a>.
     </div>
   </footer>
 
   <script>
-    const storageKey = "hayes-kids-plyometric-tracker-v1";
+    const storageKey = "hayes-kids-jump-stability-strength-tracker-v2";
+    const legacyStorageKeys = ["hayes-kids-plyometric-tracker-v1"];
     const athletes = [
       { id: "lyric", name: "Lyric", age: 14 },
       { id: "noble", name: "Noble", age: 13 },
@@ -1734,10 +1939,10 @@
     const weeks = [1, 2, 3, 4, 5, 6];
     const plan = {
       A: {
-        short: "Stability base + jump mechanics",
-        title: "Workout A: Stability Base + Jump Mechanics",
-        summary: "Build jump mechanics and stability together: quiet landings, ankle stiffness, balance, hip control, and low-volume vertical jump practice.",
-        badges: ["Stability base", "Ankle spring", "Soft landings", "Vertical prep"],
+        short: "Jump base + upper push/pull",
+        title: "Workout A: Jump Base + Upper Push/Pull",
+        summary: "Build basketball vertical jump mechanics and stability while adding upper-body push and pull strength with home equipment.",
+        badges: ["Vertical jump", "Stable landings", "Upper push/pull", "Ankle spring"],
         segments: [
           {
             name: "Warm-up",
@@ -1750,33 +1955,36 @@
             ]
           },
           {
-            name: "Landing Circuit",
-            time: "14-16 min",
+            name: "Jump + Landing Circuit",
+            time: "10-12 min",
             icon: "dumbbell",
             items: [
               ["Snap-down to athletic stance", "Rise tall, snap to hips-back stance, land quiet, hold 2 seconds.", "3 x 4"],
               ["Squat-to-calf raise", "Mini squat, drive tall, finish on toes without leaving the ground.", "2 x 8"],
-              ["Low box step-off and stick", "Step off a low box, land on both feet, freeze for 2 seconds.", "3 x 3"],
+              ["Low box jump and stick", "Jump onto a low box, land quietly, hold 2 seconds, then step down.", "3 x 3"],
+              ["Low box step-off and stick", "Step off a low box, land on both feet, freeze for 2 seconds.", "2 x 3"],
               ["Low pogo hops", "Small ankle hops, quiet feet, knees soft, stop before landings get loud.", "3 x 8"],
               ["Calf raise iso hold", "Rise to toes and hold tall without wobbling.", "2 x 20 sec"]
             ]
           },
           {
+            name: "Upper Body Strength",
+            time: "6-7 min",
+            icon: "dumbbell",
+            items: [
+              ["Incline push-up", "Hands on a counter, bench, or sturdy chair; body straight.", "2 x 8"],
+              ["Band row", "Anchor band safely, pull elbows to ribs, pause tall.", "2 x 12"],
+              ["Band pull-apart", "Soft elbows, pull band apart at chest height, control the return.", "2 x 10"]
+            ]
+          },
+          {
             name: "Core + Balance",
-            time: "4 min",
+            time: "3 min",
             icon: "shield",
             items: [
               ["Dead bug heel tap", "Ribs quiet, slow exhale, controlled taps.", "2 x 5/side"],
               ["Single-leg balance reach", "Stand tall, reach one hand forward, reset before wobbling.", "2 x 5/side"],
               ["Star balance taps", "Stand on one leg and lightly tap front, side, and back without rushing.", "2 x 3 each/side"]
-            ]
-          },
-          {
-            name: "Cardio",
-            time: "5-6 min",
-            icon: "timer",
-            items: [
-              ["Court walk-jog intervals", "20 sec light jog or fast walk, 40 sec easy walk.", "6 rounds"]
             ]
           },
           {
@@ -1794,19 +2002,20 @@
             icon: "plus",
             optional: true,
             items: [
-              ["Low box jump and stick", "Jump onto a low box, land quietly, hold 2 seconds, then step down.", "3 x 3"],
               ["Line quick taps", "Tap both feet over a tape line with short, quiet contacts.", "3 x 10 sec"],
+              ["Backpack farmer carry", "Hold a light backpack or two light weights and walk tall.", "4 x 20 sec"],
               ["Wall sit", "Shoulders and hips against wall, knees comfortable, breathe.", "2 x 25 sec"],
+              ["Court walk-jog intervals", "20 sec light jog, bike, or fast walk, 40 sec easy recovery.", "4 rounds"],
               ["Free throws after jumps", "Shoot calmly after the jump work.", "10 shots"]
             ]
           }
         ]
       },
       B: {
-        short: "Lateral stability + power",
-        title: "Workout B: Lateral Stability + Power",
-        summary: "Train power and control together: side-to-side quickness, single-leg balance, landing control, and deceleration for safer cuts and sharper changes of direction.",
-        badges: ["Lateral power", "Balance", "Deceleration", "Stable stops"],
+        short: "Lateral stability + upper strength",
+        title: "Workout B: Lateral Stability + Upper Strength",
+        summary: "Train side-to-side stability and basketball power while building upper-body strength for ball control, contact balance, and posture.",
+        badges: ["Lateral power", "Balance", "Upper strength", "Stable stops"],
         segments: [
           {
             name: "Warm-up",
@@ -1820,7 +2029,7 @@
           },
           {
             name: "Power + Control Circuit",
-            time: "15-17 min",
+            time: "11-12 min",
             icon: "dumbbell",
             items: [
               ["Lateral line hop and stick", "Hop sideways over a line, land quiet, hold 2 seconds.", "3 x 3/side"],
@@ -1828,13 +2037,22 @@
               ["Drop-step freeze", "Open one hip, take one drop step, stop balanced.", "2 x 5/side"],
               ["Low box lateral step-down", "Stand sideways on a low box, tap the outside heel down, stand back up.", "2 x 5/side"],
               ["Single-leg hip hinge reach", "Reach hips back, torso long, balance first.", "2 x 6/side"],
-              ["Single-leg stick landing", "Step off one foot into a tiny hop, land on two feet, freeze tall.", "2 x 3/side"],
-              ["Incline push-up", "Hands on bench or counter, body straight.", "2 x 8"]
+              ["Single-leg stick landing", "Step off one foot into a tiny hop, land on two feet, freeze tall.", "2 x 3/side"]
+            ]
+          },
+          {
+            name: "Upper Body Strength",
+            time: "6-7 min",
+            icon: "dumbbell",
+            items: [
+              ["Dumbbell or backpack floor press", "Lie on the floor, press light weights or backpack up, lower slowly.", "2 x 8"],
+              ["Band row", "Pull elbows to ribs and keep shoulders relaxed.", "2 x 12"],
+              ["Bear plank shoulder tap", "Hands under shoulders, knees near floor, tap opposite shoulder slowly.", "2 x 5/side"]
             ]
           },
           {
             name: "Core Control",
-            time: "3-4 min",
+            time: "3 min",
             icon: "shield",
             items: [
               ["Bird dog", "Pause 2 seconds, hips level.", "1 x 6/side"],
@@ -1842,16 +2060,8 @@
             ]
           },
           {
-            name: "Cardio",
-            time: "5-6 min",
-            icon: "timer",
-            items: [
-              ["Shuffle-to-stick intervals", "10 sec shuffle, stick the stop, 30 sec easy walk.", "6 rounds"]
-            ]
-          },
-          {
             name: "Cool-down",
-            time: "3 min",
+            time: "2 min",
             icon: "leaf",
             items: [
               ["Hip flexor stretch", "Gentle, no forcing.", "45 sec/side"],
@@ -1866,17 +2076,18 @@
             items: [
               ["Diagonal hop and stick", "Hop on a diagonal, land with knees over toes, freeze.", "2 x 3/side"],
               ["Quick feet in place", "Fast feet, quiet contacts, athletic posture.", "4 x 10 sec"],
-              ["Reverse lunge practice", "Small controlled step, hold a chair if needed.", "2 x 5/side"],
+              ["Shuffle-to-stick intervals", "10 sec shuffle, stick the stop, 30 sec easy walk.", "4 rounds"],
+              ["Band curl + press-out", "Curl the band or light weights, then press straight out with control.", "2 x 8"],
               ["Ball handling", "Stationary pounds and crossovers with quick, clean rhythm.", "4 min"]
             ]
           }
         ]
       },
       C: {
-        short: "Vertical jump + stable landings",
-        title: "Workout C: Vertical Jump + Stable Landings",
-        summary: "Train vertical jump and post-jump stability together: takeoff mechanics, arm swing timing, approach steps, landing control, and balance without turning the day into a max-jump test.",
-        badges: ["Vertical jump", "Stable landings", "Approach steps", "Balance"],
+        short: "Vertical jump + upper power",
+        title: "Workout C: Vertical Jump + Upper Power",
+        summary: "Train basketball vertical jump and post-jump stability while adding upper-body pressing, pulling, and carrying strength.",
+        badges: ["Vertical jump", "Stable landings", "Upper power", "Balance"],
         segments: [
           {
             name: "Warm-up",
@@ -1890,15 +2101,25 @@
           },
           {
             name: "Jump Mechanics Circuit",
-            time: "15-17 min",
+            time: "12-14 min",
             icon: "dumbbell",
             items: [
               ["Countermovement jump stick", "Dip, swing arms, jump at 70-80%, land quiet and hold.", "4 x 3"],
               ["Low box jump and stick", "Jump onto a low box, land in athletic stance, pause, then step down.", "3 x 3"],
               ["Approach jump footwork", "Walk through one-two plant steps, jump lightly, land balanced.", "3 x 3"],
-              ["Low step-down", "Step down from a low step, tap heel softly, control knee line.", "2 x 6/side"],
+              ["Low box step-down", "Step down from a low box, tap heel softly, control knee line.", "2 x 6/side"],
               ["Reverse lunge to knee drive", "Small step back, stand tall, pause at the top.", "2 x 6/side"],
               ["Basketball rebound reach", "Reach high like a rebound, land and chin the ball.", "2 x 5"]
+            ]
+          },
+          {
+            name: "Upper Body Strength",
+            time: "6-7 min",
+            icon: "dumbbell",
+            items: [
+              ["Push-up hold", "Hold the top of an incline push-up with body straight and shoulders steady.", "3 x 15 sec"],
+              ["Band row", "Pull elbows to ribs, pause, and return slowly.", "2 x 10"],
+              ["Two-hand farmer carry", "Hold two light weights or a backpack, walk tall and controlled.", "4 x 20 sec"]
             ]
           },
           {
@@ -1913,16 +2134,8 @@
             ]
           },
           {
-            name: "Cardio",
-            time: "6-7 min",
-            icon: "timer",
-            items: [
-              ["Sprint-float intervals", "10 sec quick run or fast bike, 50 sec easy recovery.", "6 rounds"]
-            ]
-          },
-          {
             name: "Cool-down",
-            time: "3 min",
+            time: "2 min",
             icon: "leaf",
             items: [
               ["Walk and breathe", "Let heart rate come down.", "90 sec"],
@@ -1939,12 +2152,208 @@
               ["Single-leg pogo prep", "Tiny rhythm bounces while holding wall support; switch sides.", "2 x 8/side"],
               ["Broad jump stick", "Small forward jump, quiet two-foot landing, freeze.", "3 x 2"],
               ["Approach jump footwork", "Walk through one-two plant steps, jump lightly, land balanced.", "2 x 4"],
+              ["Court walk-jog intervals", "20 sec light jog, bike, or fast walk, 40 sec easy recovery.", "4 rounds"],
               ["Free throws under light fatigue", "Shoot 2, breathe, repeat.", "12-16 shots"]
             ]
           }
         ]
       }
     };
+
+    const sprintPlan = {
+      SA: {
+        short: "Acceleration",
+        title: "Sprint A: Acceleration + Start Mechanics",
+        summary: "Separate 200/400m sprint workout for starts, drive phase, arm action, and first 10-30 yards.",
+        badges: ["Acceleration", "Drive phase", "Arm action", "Aligns with Basketball A"],
+        alignment: "Basketball Workout A supports this with snap-downs, calf holds, low box jumps, incline push-ups, and band rows for first-step power, ankle stiffness, posture, and arm drive.",
+        segments: [
+          {
+            name: "Warm-up",
+            time: "8 min",
+            icon: "pulse",
+            items: [
+              ["Easy jog, bike, or fast walk", "Start relaxed and warm up the ankles, hips, and shoulders.", "3 min"],
+              ["Dynamic leg swings + hip circles", "Small smooth range, no forcing.", "2 x 6/side"],
+              ["A-march to knee drive", "March tall, knee up, toe up, foot lands under the body.", "2 x 10 yd or 20 sec"]
+            ]
+          },
+          {
+            name: "Mechanics",
+            time: "8 min",
+            icon: "timer",
+            items: [
+              ["Wall-drive march", "Hands on wall, body angled forward, drive knee up and toe up.", "3 x 15 sec"],
+              ["Drive phase wall switches", "Switch knees quickly while keeping ribs down and toes up.", "3 x 5/side"],
+              ["Falling start walk-out", "Lean from ankles, step out before losing posture, reset.", "4 reps"]
+            ]
+          },
+          {
+            name: "Sprint Work",
+            time: "10-12 min",
+            icon: "dumbbell",
+            items: [
+              ["10-yard acceleration build-ups", "Safe flat outdoor lane; build from easy to fast but relaxed.", "4 x 10 yd"],
+              ["20-yard relaxed accelerations", "Push, rise gradually, keep shoulders relaxed.", "3 x 20 yd"],
+              ["Walk-back recovery", "Walk back slowly and breathe before the next rep.", "After each rep"]
+            ]
+          },
+          {
+            name: "Cool-down",
+            time: "3 min",
+            icon: "leaf",
+            items: [
+              ["Walk and breathe", "Let heart rate come down before stretching.", "90 sec"],
+              ["Calf + hip flexor stretch", "Gentle stretch on both sides.", "45 sec/side"]
+            ]
+          },
+          {
+            name: "Optional Add-on",
+            time: "8-10 min",
+            icon: "plus",
+            optional: true,
+            items: [
+              ["30-yard relaxed build-up", "Outdoor only; smooth speed, clean posture, no straining.", "2 x 30 yd"],
+              ["Fast bike substitute", "Use if outdoor sprint space is not available.", "4 x 12 sec"],
+              ["Band row", "Pull elbows to ribs and keep shoulders relaxed.", "2 x 10"]
+            ]
+          }
+        ]
+      },
+      SB: {
+        short: "Curve + max mechanics",
+        title: "Sprint B: Curve Control + Max-Velocity Mechanics",
+        summary: "Separate 200/400m sprint workout for upright mechanics, curve rhythm, ankle stiffness, and controlled deceleration.",
+        badges: ["Curve control", "Max mechanics", "Deceleration", "Aligns with Basketball B"],
+        alignment: "Basketball Workout B supports this with lateral hops, skater holds, drop-step freezes, low box lateral step-downs, Pallof presses, and shoulder taps for curve posture, hip stability, and safe stops.",
+        segments: [
+          {
+            name: "Warm-up",
+            time: "8 min",
+            icon: "pulse",
+            items: [
+              ["Easy jog, bike, or fast walk", "Stay tall and relaxed.", "3 min"],
+              ["A-skip rhythm", "Skip tall with quick ground contacts, knee up, toe up, relaxed arms.", "2 x 10 yd or 20 sec"],
+              ["Straight-leg dribble", "Tiny quick contacts under the hips with toes up.", "2 x 10 yd or 15 sec"]
+            ]
+          },
+          {
+            name: "Mechanics",
+            time: "8 min",
+            icon: "timer",
+            items: [
+              ["Curve lean walk", "Walk a gentle arc with tall posture and a slight whole-body lean.", "2 x 20 sec/side"],
+              ["Curve lean hold", "Hold a gentle curve lean with shoulders relaxed and hips tall.", "2 x 15 sec/side"],
+              ["Dribble-to-run rhythm", "Tiny steps into a smooth relaxed run or fast march.", "3 x 10 yd or 15 sec"]
+            ]
+          },
+          {
+            name: "Sprint Work",
+            time: "10-12 min",
+            icon: "dumbbell",
+            items: [
+              ["20-yard relaxed strides", "Outdoor lane; run tall at smooth fast speed, then coast down.", "4 x 20 yd"],
+              ["Flying 10s", "Build 10 yards, run 10 yards fast and relaxed, decelerate gently.", "3 reps"],
+              ["Controlled deceleration walk-back", "Slow down over several steps, then walk back and breathe.", "After each rep"]
+            ]
+          },
+          {
+            name: "Cool-down",
+            time: "3 min",
+            icon: "leaf",
+            items: [
+              ["Walk and breathe", "Easy walk until breathing settles.", "90 sec"],
+              ["Hamstring + hip stretch", "Gentle stretch on both sides.", "45 sec/side"]
+            ]
+          },
+          {
+            name: "Optional Add-on",
+            time: "8-10 min",
+            icon: "plus",
+            optional: true,
+            items: [
+              ["Curve walk-jog rhythm", "Use an arc or driveway turn; stay tall and relaxed through the curve.", "4 x 20 sec"],
+              ["Fast feet in place", "Quick quiet contacts, tall posture.", "4 x 10 sec"],
+              ["Bear plank shoulder tap", "Tap slowly and keep hips quiet.", "2 x 5/side"]
+            ]
+          }
+        ]
+      },
+      SC: {
+        short: "200/400 rhythm",
+        title: "Sprint C: 200/400m Rhythm + Speed Endurance",
+        summary: "Separate 200/400m sprint workout for smooth repeat-speed rhythm, posture under fatigue, and recovery between efforts.",
+        badges: ["Speed endurance", "Tempo rhythm", "Relaxed arms", "Aligns with Basketball C"],
+        alignment: "Basketball Workout C supports this with countermovement jumps, approach footwork, reverse lunge to knee drive, rebound reaches, planks, and farmer carries for hip drive, posture, repeat power, and trunk control.",
+        segments: [
+          {
+            name: "Warm-up",
+            time: "8 min",
+            icon: "pulse",
+            items: [
+              ["Easy jog, bike, or fast walk", "Build heat without rushing.", "3 min"],
+              ["March-to-skip rhythm", "Tall posture, relaxed shoulders, quick feet under the hips.", "2 x 20 sec"],
+              ["Arm swing rehearsal", "Swing cheek-to-pocket without twisting the torso.", "2 x 8"]
+            ]
+          },
+          {
+            name: "Mechanics",
+            time: "7 min",
+            icon: "timer",
+            items: [
+              ["A-march to knee drive", "Knee up, toe up, foot lands under the body.", "2 x 10 yd or 20 sec"],
+              ["A-skip rhythm", "Quick ground contacts and relaxed arms.", "2 x 10 yd or 20 sec"],
+              ["Posture reset walk", "Walk tall, ribs stacked, shoulders relaxed.", "2 x 20 sec"]
+            ]
+          },
+          {
+            name: "Sprint Work",
+            time: "12-14 min",
+            icon: "dumbbell",
+            items: [
+              ["Sprint-float intervals", "Outdoor run or fast bike: 10 sec fast relaxed, 50 sec easy.", "4 rounds"],
+              ["Tempo shuttle or bike intervals", "20 sec smooth run, shuttle, fast walk, or bike; 60 sec easy recovery.", "3 rounds"],
+              ["Full recovery walk", "Recover until breathing and posture are back under control.", "After each round"]
+            ]
+          },
+          {
+            name: "Cool-down",
+            time: "3 min",
+            icon: "leaf",
+            items: [
+              ["Walk and breathe", "Slow walk and relaxed exhales.", "90 sec"],
+              ["Quad + calf stretch", "Gentle stretch on both sides.", "45 sec/side"]
+            ]
+          },
+          {
+            name: "Optional Add-on",
+            time: "8-10 min",
+            icon: "plus",
+            optional: true,
+            items: [
+              ["150m rhythm run substitute", "Outdoor only: smooth controlled effort, not a race.", "1 rep"],
+              ["Fast bike substitute", "Use if outdoor sprint space is not available.", "4 x 15 sec"],
+              ["Two-hand farmer carry", "Walk tall with light weights or backpack.", "3 x 20 sec"]
+            ]
+          }
+        ]
+      }
+    };
+
+    const sprintTimeline = [
+      { week: 1, title: "Week 1: Learn the Positions", focus: "Starts, tall posture, relaxed arms, low volume.", work: "Sprint A, B, and C once each if legs feel fresh. Keep running reps smooth and technical." },
+      { week: 2, title: "Week 2: Build Rhythm", focus: "Repeat the same pattern with cleaner contacts.", work: "Add one clean rep to one sprint drill only if posture and recovery are good." },
+      { week: 3, title: "Week 3: Add Distance Slowly", focus: "Acceleration to 20-30 yards and smoother curve mechanics.", work: "Keep full recovery. Add distance before adding intensity." },
+      { week: 4, title: "Week 4: Speed Endurance Base", focus: "Smooth 200/400m rhythm without racing every rep.", work: "Use sprint-float or tempo intervals. Stop before form gets heavy." },
+      { week: 5, title: "Week 5: Event-Specific Rhythm", focus: "Acceleration, curve control, and repeat-speed endurance together.", work: "Use the optional add-on for only one sprint day this week." },
+      { week: 6, title: "Week 6: Sharpen + Review", focus: "Fewer reps, best mechanics, good notes.", work: "Reduce volume, record what felt fastest, and avoid max testing unless supervised." }
+    ];
+
+    const basketballSprintAlignment = [
+      { title: "Basketball Workout A -> Sprint A", text: "Jump base, snap-downs, calf holds, low box jumps, push-ups, and rows support acceleration posture, ankle stiffness, first-step power, and arm drive." },
+      { title: "Basketball Workout B -> Sprint B", text: "Lateral hops, skater holds, drop-step freezes, box step-downs, Pallof presses, and shoulder taps support curve control, hip stability, deceleration, and posture." },
+      { title: "Basketball Workout C -> Sprint C", text: "Countermovement jumps, approach footwork, reverse lunges, rebound reaches, planks, and carries support repeat power, trunk control, hip drive, and posture under fatigue." }
+    ];
 
     const scheduleDays = [
       { day: "A", weekday: 1, dayName: "Monday" },
@@ -1970,6 +2379,10 @@
     migrateLegacySessions();
     let currentWeek = state.currentWeek || 1;
     let currentDay = state.currentDay || "A";
+    let currentSprintDay = state.currentSprintDay || "SA";
+    if (!sprintPlan[currentSprintDay]) {
+      currentSprintDay = "SA";
+    }
     const todayDate = new Date();
     const programStartDate = getProgramStartDate(todayDate);
     let calendarCursor = new Date(state.calendarYear || todayDate.getFullYear(), state.calendarMonth ?? todayDate.getMonth(), 1);
@@ -1994,6 +2407,17 @@
     const painInput = document.getElementById("painInput");
     const notesInput = document.getElementById("notesInput");
     const painAlert = document.getElementById("painAlert");
+    const sprintAthleteGrid = document.getElementById("sprintAthleteGrid");
+    const sprintWeekGrid = document.getElementById("sprintWeekGrid");
+    const sprintDayTabs = document.getElementById("sprintDayTabs");
+    const sprintWorkoutTitle = document.getElementById("sprintWorkoutTitle");
+    const sprintWorkoutSummary = document.getElementById("sprintWorkoutSummary");
+    const sprintBadgeRow = document.getElementById("sprintBadgeRow");
+    const sprintProgressText = document.getElementById("sprintProgressText");
+    const sprintProgressBar = document.getElementById("sprintProgressBar");
+    const sprintSegmentList = document.getElementById("sprintSegmentList");
+    const sprintTimelineGrid = document.getElementById("sprintTimelineGrid");
+    const sprintAlignmentGrid = document.getElementById("sprintAlignmentGrid");
     const monthJump = document.getElementById("monthJump");
     const calendarTitle = document.getElementById("calendarTitle");
     const calendarWorkoutTabs = document.getElementById("calendarWorkoutTabs");
@@ -2007,7 +2431,10 @@
 
     function loadState() {
       try {
-        return JSON.parse(localStorage.getItem(storageKey)) || { sessions: {} };
+        const current = localStorage.getItem(storageKey);
+        if (current) return JSON.parse(current) || { sessions: {} };
+        const legacy = legacyStorageKeys.map(key => localStorage.getItem(key)).find(Boolean);
+        return legacy ? JSON.parse(legacy) || { sessions: {} } : { sessions: {} };
       } catch {
         return { sessions: {} };
       }
@@ -2036,6 +2463,7 @@
       state.currentAthleteId = currentAthleteId;
       state.currentWeek = currentWeek;
       state.currentDay = currentDay;
+      state.currentSprintDay = currentSprintDay;
       state.currentView = getActiveView();
       state.calendarYear = calendarCursor.getFullYear();
       state.calendarMonth = calendarCursor.getMonth();
@@ -2046,6 +2474,10 @@
 
     function sessionKey(day = currentDay, week = currentWeek, athleteId = currentAthleteId) {
       return `${athleteId}-week-${week}-${day}`;
+    }
+
+    function sprintSessionKey(day = currentSprintDay, week = currentWeek, athleteId = currentAthleteId) {
+      return `${athleteId}-sprint-week-${week}-${day}`;
     }
 
     function getSession(day = currentDay, week = currentWeek, athleteId = currentAthleteId) {
@@ -2060,8 +2492,24 @@
       return state.sessions[sessionKey(day, week, athleteId)] || emptySession();
     }
 
+    function getSprintSession(day = currentSprintDay, week = currentWeek, athleteId = currentAthleteId) {
+      const key = sprintSessionKey(day, week, athleteId);
+      if (!state.sessions[key]) {
+        state.sessions[key] = emptySession();
+      }
+      return state.sessions[key];
+    }
+
+    function peekSprintSession(day = currentSprintDay, week = currentWeek, athleteId = currentAthleteId) {
+      return state.sessions[sprintSessionKey(day, week, athleteId)] || emptySession();
+    }
+
     function exerciseId(segmentIndex, itemIndex) {
       return `${currentDay}-${segmentIndex}-${itemIndex}`;
+    }
+
+    function sprintExerciseId(segmentIndex, itemIndex) {
+      return `${currentSprintDay}-${segmentIndex}-${itemIndex}`;
     }
 
     function activeIncludesOptional() {
@@ -2076,9 +2524,22 @@
       );
     }
 
+    function allSprintItemsFor(day, includeOptional = activeIncludesOptional()) {
+      return sprintPlan[day].segments.flatMap((segment, segmentIndex) =>
+        includeOptional || !segment.optional
+          ? segment.items.map((_, itemIndex) => `${day}-${segmentIndex}-${itemIndex}`)
+          : []
+      );
+    }
+
     function checkedCount(day, week, includeOptional = activeIncludesOptional(), athleteId = currentAthleteId) {
       const session = peekSession(day, week, athleteId);
       return allItemsFor(day, includeOptional).filter(id => session.checks[id]).length;
+    }
+
+    function sprintCheckedCount(day, week, includeOptional = activeIncludesOptional(), athleteId = currentAthleteId) {
+      const session = peekSprintSession(day, week, athleteId);
+      return allSprintItemsFor(day, includeOptional).filter(id => session.checks[id]).length;
     }
 
     function renderAthleteButtons() {
@@ -2093,14 +2554,27 @@
           </button>
         `;
       }).join("");
+      sprintAthleteGrid.innerHTML = athletes.map(athlete => {
+        const completed = weeks.reduce((total, week) => (
+          total + Object.keys(sprintPlan).filter(day => sprintSessionIsComplete(day, week, athlete.id)).length
+        ), 0);
+        return `
+          <button class="athlete-btn" type="button" data-athlete="${athlete.id}" aria-pressed="${athlete.id === currentAthleteId}">
+            <span><strong>${athlete.name}</strong><small>${athlete.age} yrs old</small></span>
+            <span class="mini-progress">${completed}/18</span>
+          </button>
+        `;
+      }).join("");
     }
 
     function renderWeekButtons() {
-      weekGrid.innerHTML = weeks.map(week => `
+      const html = weeks.map(week => `
         <button class="week-btn" type="button" data-week="${week}" aria-pressed="${week === currentWeek}">
           ${week}
         </button>
       `).join("");
+      weekGrid.innerHTML = html;
+      sprintWeekGrid.innerHTML = html;
     }
 
     function renderDayTabs() {
@@ -2111,6 +2585,20 @@
           <button class="day-tab" type="button" role="tab" data-day="${day}" aria-selected="${day === currentDay}">
             <span class="dot" aria-hidden="true"></span>
             <span><strong>${day}</strong><small>${workout.short}</small></span>
+            <span class="mini-progress">${done}/${total}</span>
+          </button>
+        `;
+      }).join("");
+    }
+
+    function renderSprintDayTabs() {
+      sprintDayTabs.innerHTML = Object.entries(sprintPlan).map(([day, workout]) => {
+        const total = allSprintItemsFor(day).length;
+        const done = sprintCheckedCount(day, currentWeek);
+        return `
+          <button class="day-tab" type="button" role="tab" data-sprint-day="${day}" aria-selected="${day === currentSprintDay}">
+            <span class="dot" aria-hidden="true"></span>
+            <span><strong>${day.replace("S", "")}</strong><small>${workout.short}</small></span>
             <span class="mini-progress">${done}/${total}</span>
           </button>
         `;
@@ -2136,12 +2624,14 @@
           <div class="exercise-grid">
             ${segment.items.map((item, itemIndex) => {
               const id = exerciseId(segmentIndex, itemIndex);
+              const tags = exerciseTags(item[0]);
               return `
                 <label class="exercise">
                   <input type="checkbox" data-check="${id}" ${session.checks[id] ? "checked" : ""}>
                   <span class="exercise-main">
                     <strong>${item[0]}</strong>
                     <span>${item[1]}</span>
+                    ${tags.length ? `<span class="exercise-tags">${tags.map(tag => `<span class="exercise-tag ${tagClass(tag)}">${tag}</span>`).join("")}</span>` : ""}
                   </span>
                   <span class="dose">${item[2]}</span>
                 </label>
@@ -2163,12 +2653,78 @@
       refreshSupportingViews();
     }
 
+    function renderSprintWorkout() {
+      const workout = sprintPlan[currentSprintDay];
+      const session = getSprintSession();
+      sprintWorkoutTitle.textContent = workout.title;
+      sprintWorkoutSummary.textContent = `${workout.summary} ${workout.alignment}`;
+      sprintBadgeRow.innerHTML = workout.badges.map(badge => `<span class="badge">${badge}</span>`).join("");
+      sprintSegmentList.innerHTML = workout.segments.map((segment, segmentIndex) => `
+        <section class="segment ${segment.optional ? "optional" : ""}">
+          <div class="segment-header">
+            <h3>${renderIcon(segment.icon)} ${segment.name}</h3>
+            <span class="segment-time">${segment.time}</span>
+          </div>
+          <div class="exercise-grid">
+            ${segment.items.map((item, itemIndex) => {
+              const id = sprintExerciseId(segmentIndex, itemIndex);
+              const tags = [...new Set(["Sprint", ...exerciseTags(item[0])])];
+              return `
+                <label class="exercise">
+                  <input type="checkbox" data-sprint-check="${id}" ${session.checks[id] ? "checked" : ""}>
+                  <span class="exercise-main">
+                    <strong>${item[0]}</strong>
+                    <span>${item[1]}</span>
+                    <span class="exercise-tags">${tags.map(tag => `<span class="exercise-tag ${tagClass(tag)}">${tag}</span>`).join("")}</span>
+                  </span>
+                  <span class="dose">${item[2]}</span>
+                </label>
+              `;
+            }).join("")}
+          </div>
+        </section>
+      `).join("");
+
+      renderSprintProgress();
+      renderSprintDayTabs();
+      renderSprintTimeline();
+      renderSprintAlignment();
+    }
+
     function renderProgress() {
       const total = allItemsFor(currentDay).length;
       const done = checkedCount(currentDay, currentWeek);
       const pct = total ? Math.round((done / total) * 100) : 0;
       progressText.textContent = `${pct}%`;
       progressBar.style.width = `${pct}%`;
+    }
+
+    function renderSprintProgress() {
+      const total = allSprintItemsFor(currentSprintDay).length;
+      const done = sprintCheckedCount(currentSprintDay, currentWeek);
+      const pct = total ? Math.round((done / total) * 100) : 0;
+      sprintProgressText.textContent = `${pct}%`;
+      sprintProgressBar.style.width = `${pct}%`;
+    }
+
+    function renderSprintTimeline() {
+      sprintTimelineGrid.innerHTML = sprintTimeline.map(item => `
+        <article class="timeline-card ${item.week === currentWeek ? "is-current" : ""}">
+          <span class="badge">Week ${item.week}</span>
+          <h3>${item.title.replace(`Week ${item.week}: `, "")}</h3>
+          <p><strong>Focus:</strong> ${item.focus}</p>
+          <p><strong>Work:</strong> ${item.work}</p>
+        </article>
+      `).join("");
+    }
+
+    function renderSprintAlignment() {
+      sprintAlignmentGrid.innerHTML = basketballSprintAlignment.map(item => `
+        <article class="alignment-card">
+          <h3>${item.title}</h3>
+          <p>${item.text}</p>
+        </article>
+      `).join("");
     }
 
     function getActiveView() {
@@ -2178,6 +2734,7 @@
     function switchView(view, shouldSave = true) {
       viewTabs.forEach(tab => tab.setAttribute("aria-selected", String(tab.dataset.view === view)));
       viewPanels.forEach(panel => panel.classList.toggle("is-active", panel.id === `view-${view}`));
+      if (view === "sprint") renderSprintWorkout();
       if (view === "calendar") renderCalendar();
       if (view === "progress") renderProgressView();
       if (view === "descriptions") renderDescriptions();
@@ -2234,6 +2791,12 @@
       return { done, total, pct: total ? Math.round((done / total) * 100) : 0 };
     }
 
+    function sprintSessionCompletion(day, week, athleteId = currentAthleteId) {
+      const total = allSprintItemsFor(day, false).length;
+      const done = sprintCheckedCount(day, week, false, athleteId);
+      return { done, total, pct: total ? Math.round((done / total) * 100) : 0 };
+    }
+
     function sessionIsLogged(day, week, athleteId = currentAthleteId) {
       const session = peekSession(day, week, athleteId);
       return Boolean(session.minutes || session.rpe || session.pain || session.notes || Object.values(session.checks || {}).some(Boolean));
@@ -2243,6 +2806,10 @@
       const completion = sessionCompletion(day, week, athleteId);
       const session = peekSession(day, week, athleteId);
       return completion.pct >= 80 || Number(session.minutes || 0) >= 25;
+    }
+
+    function sprintSessionIsComplete(day, week, athleteId = currentAthleteId) {
+      return sprintSessionCompletion(day, week, athleteId).pct >= 80;
     }
 
     function allSessionRecords(athleteId = currentAthleteId) {
@@ -2353,7 +2920,7 @@
         <p><strong>Workout ${day}: ${plan[day].title.replace(`Workout ${day}: `, "")}</strong><br>
         ${currentAthlete().name}'s status: ${sessionIsComplete(day, week) ? "Completed" : "Planned"} • Week ${week} • ${completion.done}/${completion.total} activities done${session.minutes ? ` • ${session.minutes} min logged` : ""}</p>
         <button class="text-button primary-button" type="button" data-open-plan="${day}" data-date="${selectedCalendarIso}" data-week="${week}">
-          ${renderIcon("dumbbell")} Open Workout Plan
+          ${renderIcon("dumbbell")} Open Basketball Workout
         </button>
       `;
     }
@@ -2385,18 +2952,24 @@
     function renderProgressView() {
       const athlete = currentAthlete();
       const currentWeekDone = Object.keys(plan).filter(day => sessionIsComplete(day, currentWeek)).length;
+      const sprintWeekDone = Object.keys(sprintPlan).filter(day => sprintSessionIsComplete(day, currentWeek)).length;
       const next = nextScheduledWorkout();
       const minutes = Object.keys(plan).reduce((total, day) => total + Number(peekSession(day, currentWeek).minutes || 0), 0);
       const completedTotal = allSessionRecords().filter(record => sessionIsComplete(record.day, record.week)).length;
+      const sprintCompletedTotal = weeks.reduce((total, week) => (
+        total + Object.keys(sprintPlan).filter(day => sprintSessionIsComplete(day, week)).length
+      ), 0);
+      const progressDescriptions = exerciseDescriptions.filter(entry => entry.workouts.length);
       progressStats.innerHTML = `
         <div class="stat-card"><span>Kid</span><strong>${athlete.name}<br><small>${athlete.age} yrs old</small></strong></div>
-        <div class="stat-card"><span>This Week</span><strong>${currentWeekDone} / 3</strong></div>
+        <div class="stat-card"><span>Basketball Week</span><strong>${currentWeekDone} / 3</strong></div>
+        <div class="stat-card"><span>Sprint Week</span><strong>${sprintWeekDone} / 3</strong></div>
         <div class="stat-card"><span>Next Workout</span><strong>Workout ${next.day}<br><small>${formatDate(next.date)}</small></strong></div>
         <div class="stat-card"><span>Minutes Logged</span><strong>${minutes} min</strong></div>
-        <div class="stat-card"><span>Completed Sessions</span><strong>${completedTotal}</strong></div>
+        <div class="stat-card"><span>Completed Sessions</span><strong>${completedTotal} basketball<br><small>${sprintCompletedTotal} sprint</small></strong></div>
       `;
 
-      progressTableBody.innerHTML = exerciseDescriptions.map(entry => {
+      progressTableBody.innerHTML = progressDescriptions.map(entry => {
         const latest = latestRecordFor(entry.workouts);
         const lastText = latest
           ? `${latest.completion.pct}% done${latest.session.date ? `<small>${latest.session.date} - discomfort ${latest.session.pain || "not logged"}</small>` : ""}`
@@ -2404,7 +2977,7 @@
         const nextText = latest ? guidanceFor(latest.day, latest.week) : "Start light and focus on form.";
         return `
           <tr>
-            <td><strong>${entry.name}</strong><small>${entry.workouts.map(day => `Workout ${day}`).join(", ")} • ${entry.dose}</small></td>
+            <td><strong>${entry.name}</strong><small>${entry.labels.filter(label => label.startsWith("Basketball")).join(", ")} • ${entry.dose}</small></td>
             <td>${entry.muscles}</td>
             <td>${lastText}</td>
             <td>${nextText}</td>
@@ -2438,10 +3011,25 @@
         if (lower.includes("lateral")) {
           return { muscles: "Glutes, quads, hips, calves, ankles, core", how: "Stand sideways on a low box, slowly lower the outside heel toward the floor, lightly tap, then stand back up without collapsing the knee inward.", purpose: "Improves single-leg stability, hip control, knee tracking, and safer cutting or defensive slides.", cue: "Move slowly and keep the working knee lined up over the toes." };
         }
+        if (lower.includes("step-down")) {
+          return { muscles: "Glutes, quads, hips, calves, ankles, core", how: "Stand tall on a low box, step one foot down slowly, lightly tap the heel, then drive through the top foot to stand back up.", purpose: "Improves single-leg stability, knee tracking, hip control, and controlled landings after jumps.", cue: "Go slow and keep the working knee lined up over the toes." };
+        }
         if (lower.includes("quality")) {
           return { muscles: "Glutes, quads, calves, ankles, hips, core", how: "Do a low box jump, land on the box, pause, then score the landing for quiet feet, knees over toes, and balanced finish.", purpose: "Improves landing awareness, stability after jumping, and the ability to self-check form before progressing.", cue: "If the landing is loud or wobbly, lower the box or stop the set." };
         }
         return { muscles: "Glutes, quads, calves, ankles, hips, core", how: "Stand close to a low sturdy box, jump up with two feet, land softly in athletic stance, hold 2 seconds, then step down one foot at a time.", purpose: "Improves vertical jump power and stability by practicing explosive takeoff with quiet, controlled landings.", cue: "Jump onto the box, hold the landing, and step down instead of jumping down." };
+      }
+      if (lower.includes("curve")) {
+        return { muscles: "Glutes, hips, calves, ankles, core, shoulders", how: "Move through a gentle arc with tall posture, relaxed shoulders, active arms, and a slight whole-body lean instead of bending at the waist.", purpose: "Improves curve-running control for the 200m and 400m, hip stability, posture, and smooth transitions into straight running.", cue: "Lean from the whole body and keep the head, ribs, and hips stacked." };
+      }
+      if (lower.includes("wall-drive") || lower.includes("drive phase") || lower.includes("a-march") || lower.includes("a-skip") || lower.includes("march-to-skip") || lower.includes("arm swing rehearsal")) {
+        return { muscles: "Hip flexors, glutes, calves, ankles, shoulders, core", how: "Stay tall or use a controlled forward angle, drive the knee up, keep the toe up, swing the arms cheek-to-pocket, and land under the body.", purpose: "Improves sprint mechanics for acceleration and upright running, including rhythm, knee drive, arm action, ankle stiffness, and posture.", cue: "Relax the face and shoulders while the arms and feet stay quick." };
+      }
+      if (lower.includes("acceleration build") || lower.includes("sprint-float") || lower.includes("tempo shuttle") || lower.includes("walk-jog intervals")) {
+        return { muscles: "Glutes, hamstrings, quads, calves, ankles, heart, lungs", how: "Use a safe flat outdoor lane, bike, shuttle, fast walk, or jog option. Build speed smoothly, stay relaxed, recover fully, and stop before form gets sloppy.", purpose: "Improves 200/400m repeat-speed rhythm, relaxed sprinting, posture under fatigue, and recovery between fast efforts.", cue: "Fast but smooth beats strained. Keep every rep technical." };
+      }
+      if (lower.includes("approach jump footwork")) {
+        return { muscles: "Glutes, quads, calves, ankles, hips, core", how: "Walk through one-two plant steps with sprint posture, swing the arms, jump lightly, and land balanced before repeating.", purpose: "Improves sprint-to-jump rhythm, penultimate-step control, takeoff timing, and landing stability.", cue: "Keep the steps smooth and land before chasing height." };
       }
       if (lower.includes("vertical jump") || lower.includes("countermovement") || lower.includes("plyometric") || lower.includes("pogo") || lower.includes("approach jump") || lower.includes("squat-to-calf") || lower.includes("broad jump")) {
         return { muscles: "Glutes, quads, calves, ankles, core", how: "Use a quick athletic dip, drive through the floor, swing the arms with control, land softly, and hold the finish before the next rep.", purpose: "Improves vertical jump power, ankle spring, arm swing timing, and landing control.", cue: "Keep jumps crisp, land softly, and stop if knees, ankles, feet, or back feel sharp pain." };
@@ -2460,6 +3048,12 @@
       }
       if (lower.includes("row") || lower.includes("pull-apart")) {
         return { muscles: "Upper back, lats, rear shoulders, biceps", how: "Start tall, pull with the back and arms, pause briefly, then return with control.", purpose: "Improves posture, arm strength, and rebound or contact control.", cue: "Pull elbows toward ribs while shoulders stay relaxed." };
+      }
+      if (lower.includes("shoulder tap")) {
+        return { muscles: "Shoulders, chest, triceps, deep core", how: "Hold a bear plank or incline plank, tap the opposite shoulder slowly, and keep hips from rocking.", purpose: "Improves upper-body stability, shoulder control, and trunk control for contact and landing.", cue: "Move slowly and keep the body quiet." };
+      }
+      if (lower.includes("press-out")) {
+        return { muscles: "Chest, shoulders, triceps, biceps, core", how: "Curl the light weight or band, then press straight out with control before returning to the start.", purpose: "Improves arm strength, shoulder control, and ball-protection strength.", cue: "Keep ribs down and do not lean back." };
       }
       if (lower.includes("arm circles") || lower.includes("wall slides")) {
         return { muscles: "Shoulders, upper back, shoulder blade stabilizers", how: "Move the arms through a smooth pain-free range while keeping ribs down and posture tall.", purpose: "Improves shoulder readiness for jumping arm swing, passing, and shooting.", cue: "Move the shoulders smoothly without flaring the ribs." };
@@ -2496,42 +3090,125 @@
 
     function buildExerciseDescriptions() {
       const byName = new Map();
+      const addItem = (item, label, trackDay = "") => {
+        const existing = byName.get(item[0]);
+        if (existing) {
+          if (!existing.labels.includes(label)) existing.labels.push(label);
+          if (trackDay && !existing.workouts.includes(trackDay)) existing.workouts.push(trackDay);
+          if (!existing.dose.includes(item[2])) existing.dose += ` / ${item[2]}`;
+          return;
+        }
+        byName.set(item[0], {
+          name: item[0],
+          labels: [label],
+          workouts: trackDay ? [trackDay] : [],
+          dose: item[2],
+          ...describeExercise(item[0])
+        });
+      };
       Object.entries(plan).forEach(([day, workout]) => {
         workout.segments.forEach(segment => {
           segment.items.forEach(item => {
-            const existing = byName.get(item[0]);
-            if (existing) {
-              existing.workouts.push(day);
-              if (!existing.dose.includes(item[2])) existing.dose += ` / ${item[2]}`;
-              return;
-            }
-            byName.set(item[0], {
-              name: item[0],
-              workouts: [day],
-              dose: item[2],
-              ...describeExercise(item[0])
-            });
+            addItem(item, `Basketball ${day}`, day);
+          });
+        });
+      });
+      Object.entries(sprintPlan).forEach(([day, workout]) => {
+        workout.segments.forEach(segment => {
+          segment.items.forEach(item => {
+            addItem(item, `Sprint ${day.replace("S", "")}`);
           });
         });
       });
       return [...byName.values()].sort((a, b) => a.name.localeCompare(b.name));
     }
 
+    function isBoxName(name) {
+      return name.toLowerCase().includes("box");
+    }
+
+    function isUpperBodyName(name) {
+      const lower = name.toLowerCase();
+      return ["push-up", "row", "pull-apart", "press", "carry", "curl", "shoulder tap"].some(term => lower.includes(term));
+    }
+
+    function isSprintName(name) {
+      const lower = name.toLowerCase();
+      return ["sprint", "acceleration", "drive", "a-march", "a-skip", "march-to-skip", "curve", "tempo", "build-up", "footwork", "quick feet"].some(term => lower.includes(term));
+    }
+
+    function isStabilityName(name) {
+      const lower = name.toLowerCase();
+      return ["balance", "stick", "step-down", "landing", "skater", "drop-step", "shuffle", "pallof", "plank", "hinge"].some(term => lower.includes(term));
+    }
+
+    function exerciseTags(name) {
+      const tags = [];
+      if (isBoxName(name)) tags.push("Box");
+      if (isSprintName(name)) tags.push("Sprint");
+      if (isUpperBodyName(name)) tags.push("Upper Body");
+      if (isStabilityName(name)) tags.push("Stability");
+      return tags;
+    }
+
+    function tagClass(tag) {
+      if (tag === "Box") return "is-box";
+      if (tag === "Sprint") return "is-sprint";
+      return "";
+    }
+
+    function isBoxExercise(entry) {
+      return isBoxName(entry.name);
+    }
+
+    function isUpperBodyExercise(entry) {
+      return isUpperBodyName(entry.name);
+    }
+
+    function isSprintExercise(entry) {
+      return isSprintName(entry.name);
+    }
+
+    function isStabilityExercise(entry) {
+      return isStabilityName(entry.name);
+    }
+
     function renderDescriptions() {
-      const filters = [{ id: "all", label: "All" }, { id: "box", label: "Box" }, ...Object.keys(plan).map(day => ({ id: day, label: `Workout ${day}` }))];
+      const filters = [
+        { id: "all", label: "All" },
+        { id: "box", label: "Box" },
+        { id: "sprint", label: "Sprint" },
+        { id: "upper", label: "Upper Body" },
+        { id: "stability", label: "Stability" },
+        { id: "basketball", label: "Basketball" },
+        { id: "sprint-workout", label: "Sprint Workout" }
+      ];
+      if (!filters.some(filter => filter.id === descriptionFilter)) {
+        descriptionFilter = "all";
+      }
       descriptionFilters.innerHTML = filters.map(filter => `
         <button class="description-filter" type="button" data-description-filter="${filter.id}" aria-pressed="${descriptionFilter === filter.id}">
           ${filter.label}
         </button>
       `).join("");
-      const visible = exerciseDescriptions.filter(entry => descriptionFilter === "all" || (descriptionFilter === "box" && entry.name.toLowerCase().includes("box")) || entry.workouts.includes(descriptionFilter));
+      const visible = exerciseDescriptions.filter(entry => {
+        if (descriptionFilter === "all") return true;
+        if (descriptionFilter === "box") return isBoxExercise(entry);
+        if (descriptionFilter === "sprint") return isSprintExercise(entry);
+        if (descriptionFilter === "upper") return isUpperBodyExercise(entry);
+        if (descriptionFilter === "stability") return isStabilityExercise(entry);
+        if (descriptionFilter === "basketball") return entry.labels.some(label => label.startsWith("Basketball"));
+        if (descriptionFilter === "sprint-workout") return entry.labels.some(label => label.startsWith("Sprint"));
+        return true;
+      });
       descriptionGrid.innerHTML = visible.map(entry => `
         <article class="description-card">
           <div>
             <h3>${entry.name}</h3>
             <div class="description-meta">
-              ${entry.workouts.map(day => `<span class="badge">Workout ${day}</span>`).join("")}
+              ${entry.labels.map(label => `<span class="badge">${label}</span>`).join("")}
               <span class="badge">${entry.dose}</span>
+              ${exerciseTags(entry.name).map(tag => `<span class="badge">${tag}</span>`).join("")}
             </div>
           </div>
           <p><strong>Muscles:</strong> ${entry.muscles}</p>
@@ -2545,6 +3222,7 @@
     function refreshSupportingViews() {
       renderCalendar();
       renderProgressView();
+      renderSprintWorkout();
       renderDescriptions();
     }
 
@@ -2583,18 +3261,44 @@
               session.notes || ""
             ]);
           });
+          Object.keys(sprintPlan).forEach(day => {
+            const session = peekSprintSession(day, week, athlete.id);
+            const total = allSprintItemsFor(day).length;
+            const done = sprintCheckedCount(day, week, activeIncludesOptional(), athlete.id);
+            rows.push([
+              athlete.name,
+              athlete.age,
+              week,
+              `${day} - ${sprintPlan[day].short}`,
+              "",
+              "",
+              "",
+              "",
+              done,
+              total,
+              "Sprint workout tab"
+            ]);
+          });
         });
       });
       const csv = rows.map(row => row.map(cell => `"${String(cell).replaceAll('"', '""')}"`).join(",")).join("\n");
       const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
-      link.download = "hayes-kids-individual-plyometric-progress.csv";
+      link.download = "hayes-kids-jump-sprint-stability-strength-progress.csv";
       link.click();
       URL.revokeObjectURL(link.href);
     }
 
     athleteGrid.addEventListener("click", event => {
+      const button = event.target.closest("[data-athlete]");
+      if (!button) return;
+      currentAthleteId = button.dataset.athlete;
+      saveState();
+      renderWorkout();
+    });
+
+    sprintAthleteGrid.addEventListener("click", event => {
       const button = event.target.closest("[data-athlete]");
       if (!button) return;
       currentAthleteId = button.dataset.athlete;
@@ -2611,12 +3315,29 @@
       renderWorkout();
     });
 
+    sprintWeekGrid.addEventListener("click", event => {
+      const button = event.target.closest("[data-week]");
+      if (!button) return;
+      currentWeek = Number(button.dataset.week);
+      saveState();
+      renderWeekButtons();
+      renderWorkout();
+    });
+
     dayTabs.addEventListener("click", event => {
       const button = event.target.closest("[data-day]");
       if (!button) return;
       currentDay = button.dataset.day;
       saveState();
       renderWorkout();
+    });
+
+    sprintDayTabs.addEventListener("click", event => {
+      const button = event.target.closest("[data-sprint-day]");
+      if (!button) return;
+      currentSprintDay = button.dataset.sprintDay;
+      saveState();
+      renderSprintWorkout();
     });
 
     segmentList.addEventListener("change", event => {
@@ -2630,14 +3351,26 @@
       renderProgressView();
     });
 
+    sprintSegmentList.addEventListener("change", event => {
+      if (!event.target.matches("[data-sprint-check]")) return;
+      getSprintSession().checks[event.target.dataset.sprintCheck] = event.target.checked;
+      saveState();
+      renderSprintProgress();
+      renderAthleteButtons();
+      renderSprintDayTabs();
+      renderSprintTimeline();
+    });
+
     document.querySelectorAll(".mode-btn").forEach(button => {
       button.addEventListener("click", () => {
         document.body.dataset.mode = button.dataset.mode;
         document.querySelectorAll(".mode-btn").forEach(nextButton => {
-          nextButton.setAttribute("aria-pressed", String(nextButton === button));
+          nextButton.setAttribute("aria-pressed", String(nextButton.dataset.mode === button.dataset.mode));
         });
         renderProgress();
         renderDayTabs();
+        renderSprintProgress();
+        renderSprintDayTabs();
         renderProgressView();
       });
     });
