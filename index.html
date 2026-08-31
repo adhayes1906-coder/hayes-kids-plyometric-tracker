@@ -1816,6 +1816,15 @@
             <section class="sprint-panel">
               <div class="panel-head">
                 <div>
+                  <h2>Full Suggested Sprinter Workout Plan</h2>
+                  <p>The 200/400m sprint plan is listed here separately from the basketball workout. Use Sprint A, Sprint B, and Sprint C as the weekly sprint structure.</p>
+                </div>
+                <span class="badge">Sprint A/B/C</span>
+              </div>
+              <div class="timeline-grid" id="sprintFullPlanGrid"></div>
+
+              <div class="panel-head">
+                <div>
                   <h2>Sprinter Timeline</h2>
                   <p>Suggested six-week 200/400m timeline: build mechanics first, then rhythm, curve control, speed endurance, and a lighter sharpen week.</p>
                 </div>
@@ -2416,6 +2425,7 @@
     const sprintProgressText = document.getElementById("sprintProgressText");
     const sprintProgressBar = document.getElementById("sprintProgressBar");
     const sprintSegmentList = document.getElementById("sprintSegmentList");
+    const sprintFullPlanGrid = document.getElementById("sprintFullPlanGrid");
     const sprintTimelineGrid = document.getElementById("sprintTimelineGrid");
     const sprintAlignmentGrid = document.getElementById("sprintAlignmentGrid");
     const monthJump = document.getElementById("monthJump");
@@ -2687,6 +2697,7 @@
 
       renderSprintProgress();
       renderSprintDayTabs();
+      renderSprintFullPlan();
       renderSprintTimeline();
       renderSprintAlignment();
     }
@@ -2714,6 +2725,19 @@
           <h3>${item.title.replace(`Week ${item.week}: `, "")}</h3>
           <p><strong>Focus:</strong> ${item.focus}</p>
           <p><strong>Work:</strong> ${item.work}</p>
+        </article>
+      `).join("");
+    }
+
+    function renderSprintFullPlan() {
+      sprintFullPlanGrid.innerHTML = Object.entries(sprintPlan).map(([day, workout]) => `
+        <article class="timeline-card ${day === currentSprintDay ? "is-current" : ""}">
+          <span class="badge">${day.replace("S", "Sprint ")}</span>
+          <h3>${workout.title.replace(`${day.replace("S", "Sprint ")}: `, "")}</h3>
+          <p>${workout.summary}</p>
+          ${workout.segments.map(segment => `
+            <p><strong>${segment.name} (${segment.time}):</strong> ${segment.items.map(item => `${item[0]} - ${item[2]}`).join("; ")}</p>
+          `).join("")}
         </article>
       `).join("");
     }
